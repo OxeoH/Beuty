@@ -22,10 +22,10 @@ jobs:
           architecture: 'x64'
 
       - name: Install 🔧
-        run: mvn clean install -DskipTests 
+        run: mvn clean install -DskipTests -f ../BeatyPlace/BeatyPlace/pom.xml
 
       - name: Run Test 🔨
-        run: mvn test 
+        run: mvn test -f ../BeatyPlace/BeatyPlace/pom.xml
 
       - name: Build 👷
-        run: mvn clean compile
+        run: mvn clean compile -f ../BeatyPlace/BeatyPlace/pom.xml
