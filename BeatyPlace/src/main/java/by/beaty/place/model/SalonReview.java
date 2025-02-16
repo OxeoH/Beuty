@@ -1,6 +1,5 @@
-package by.beaty.place.model.common;
+package by.beaty.place.model;
 
-import by.beaty.place.model.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,10 +9,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "salon_reviews")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class SalonReview {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
