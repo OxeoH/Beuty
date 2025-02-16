@@ -29,3 +29,15 @@ SELECT 'Pedicure'
 INSERT INTO categories (name)
 SELECT 'Massage'
     WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Massage');
+
+INSERT INTO salon_reviews (rating, client_id, created_at, comment)
+SELECT 5, 2, NOW(), 'Отличный сервис!'
+    WHERE NOT EXISTS (SELECT 1 FROM salon_reviews WHERE client_id = 1);
+
+INSERT INTO salon_reviews (rating, client_id, created_at, comment)
+SELECT 4, 3, NOW(), 'Все понравилось, но можно улучшить атмосферу.'
+    WHERE NOT EXISTS (SELECT 1 FROM salon_reviews WHERE client_id = 2);
+
+INSERT INTO salon_reviews (rating, client_id, created_at, comment)
+SELECT 3, 4, NOW(), 'Средний уровень, ожидал большего.'
+    WHERE NOT EXISTS (SELECT 1 FROM salon_reviews WHERE client_id = 3);
