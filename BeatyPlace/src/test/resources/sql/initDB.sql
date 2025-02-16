@@ -13,3 +13,19 @@ SELECT false, '987654', 3, '2025-12-31 23:59:59', 'master@example.com', 'Master 
 INSERT INTO users (email_verified, verification_code, id, verification_code_expires_at, email, full_name, password, role, username)
 SELECT true, '456789', 4, '2025-12-31 23:59:59', 'user@example.com', 'Regular User', 'user_pass', 'CLIENT', 'user123'
     WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'user@example.com');
+
+INSERT INTO categories (name)
+SELECT 'Haircut'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Haircut');
+
+INSERT INTO categories (name)
+SELECT 'Manicure'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Manicure');
+
+INSERT INTO categories (name)
+SELECT 'Pedicure'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Pedicure');
+
+INSERT INTO categories (name)
+SELECT 'Massage'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Massage');
