@@ -41,3 +41,4 @@ SELECT 4, 3, NOW(), 'Все понравилось, но можно улучши
 INSERT INTO salon_reviews (rating, client_id, created_at, comment)
 SELECT 3, 4, NOW(), 'Средний уровень, ожидал большего.'
     WHERE NOT EXISTS (SELECT 1 FROM salon_reviews WHERE client_id = 3);
+
