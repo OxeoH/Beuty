@@ -63,3 +63,12 @@ SELECT true, now(), 3, 'Система обновлена', 'SYSTEM'
     WHERE user_id = 3 AND message = 'Система обновлена'
 );
 
+INSERT INTO reviews (rating, client_id, created_at, master_id, comment)
+SELECT 3, 2, now(), 3, 'Не совсем то, что ожидал.'
+    WHERE NOT EXISTS (
+    SELECT 1 FROM reviews
+    WHERE client_id = 2 AND master_id = 3 AND comment = 'Не совсем то, что ожидал.'
+)
+LIMIT 1;
+
+
