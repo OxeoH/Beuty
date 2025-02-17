@@ -71,4 +71,9 @@ SELECT 3, 2, now(), 3, 'Не совсем то, что ожидал.'
 )
 LIMIT 1;
 
-
+INSERT INTO blacklist (blocked_at, blocked_by, blocked_until, user_id, reason)
+SELECT now(), 12, now() + INTERVAL '1 day', 2, 'Нарушение правил'
+WHERE NOT EXISTS (
+    SELECT 1 FROM blacklist
+    WHERE user_id = 2 AND reason = 'Нарушение правил'
+    );
