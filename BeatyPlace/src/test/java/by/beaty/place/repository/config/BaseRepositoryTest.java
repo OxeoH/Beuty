@@ -23,7 +23,7 @@ public abstract class BaseRepositoryTest {
             .withDatabaseName("prop")
             .withUsername("postgres")
             .withPassword("postgres")
-            .withExposedPorts(5432);
+            .withReuse(true);
 
     @BeforeAll
     static void startContainer() {
