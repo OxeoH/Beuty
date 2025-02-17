@@ -42,3 +42,24 @@ INSERT INTO salon_reviews (rating, client_id, created_at, comment)
 SELECT 3, 4, NOW(), 'Средний уровень, ожидал большего.'
     WHERE NOT EXISTS (SELECT 1 FROM salon_reviews WHERE client_id = 3);
 
+INSERT INTO notifications (is_read, created_at, user_id, message, notification_type)
+SELECT false, now(), 2, 'Ваша запись подтверждена', 'APPOINTMENT'
+    WHERE NOT EXISTS (
+    SELECT 1 FROM notifications
+    WHERE user_id = 1 AND message = 'Ваша запись подтверждена'
+);
+
+INSERT INTO notifications (is_read, created_at, user_id, message, notification_type)
+SELECT false, now(), 2, 'Ваш отзыв принят', 'REVIEW'
+    WHERE NOT EXISTS (
+    SELECT 1 FROM notifications
+    WHERE user_id = 2 AND message = 'Ваш отзыв принят'
+);
+
+INSERT INTO notifications (is_read, created_at, user_id, message, notification_type)
+SELECT true, now(), 3, 'Система обновлена', 'SYSTEM'
+    WHERE NOT EXISTS (
+    SELECT 1 FROM notifications
+    WHERE user_id = 3 AND message = 'Система обновлена'
+);
+
