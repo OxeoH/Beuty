@@ -9,8 +9,22 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: prop
+        ports:
+          - 32769:32769
+        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+
     steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Checkout 🛎️
         uses: actions/checkout@v3 
 
@@ -20,6 +34,14 @@ jobs:
           java-version: '17'  
           distribution: 'temurin'
           architecture: 'x64'
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 32769 -U postgres; do
+            echo "Waiting for PostgreSQL to start..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready."
 
       - name: Install 🔧
         run: mvn clean install -DskipTests -f BeatyPlace/pom.xml
