@@ -28,7 +28,6 @@ public abstract class BaseRepositoryTest {
             .withExposedPorts(5432)
             .withReuse(true);
 
-
     @BeforeAll
     static void startContainer() {
         postgreSQLContainer.start();
