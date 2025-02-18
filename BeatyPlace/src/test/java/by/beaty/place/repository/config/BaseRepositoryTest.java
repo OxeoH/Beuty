@@ -9,6 +9,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -23,6 +24,7 @@ public abstract class BaseRepositoryTest {
             .withDatabaseName("prop")
             .withUsername("postgres")
             .withPassword("postgres")
+            .waitingFor(Wait.forListeningPort())
             .withReuse(true);
 
     @BeforeAll
