@@ -34,15 +34,15 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Users client; // Клиент, который записался
+    private Users client;
 
     @ManyToOne
     @JoinColumn(name = "master_id", nullable = false)
-    private Users master; // Мастер, к которому записались
+    private Users master;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category; // Категория процедуры
+    private Category category;
 
     @Column(nullable = false)
     private LocalDateTime appointmentDate;
@@ -55,6 +55,6 @@ public class Appointment {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private AppointmentStatus status; // Статус записи (например, PENDING, CONFIRMED, CANCELED)
+    private AppointmentStatus status;
 }
 
