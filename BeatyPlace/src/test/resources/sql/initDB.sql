@@ -14,21 +14,27 @@ INSERT INTO users (email_verified, verification_code, id, verification_code_expi
 SELECT true, '456789', 4, '2025-12-31 23:59:59', 'user@example.com', 'Regular User', 'user_pass', 'CLIENT', 'user123'
     WHERE NOT EXISTS (SELECT 1 FROM users WHERE email = 'user@example.com');
 
-INSERT INTO categories (name)
-SELECT 'Haircut'
-    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Haircut');
+INSERT INTO categories (id, name)
+SELECT 2, 'Manicure'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE id = 2 OR name = 'Manicure');
 
-INSERT INTO categories (name)
-SELECT 'Manicure'
-    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Manicure');
+INSERT INTO categories (id, name)
+SELECT 3, 'Pedicure'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE id = 3 OR name = 'Pedicure');
 
-INSERT INTO categories (name)
-SELECT 'Pedicure'
-    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Pedicure');
+INSERT INTO categories (id, name)
+SELECT 4, 'Massage'
+    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE id = 4 OR name = 'Massage');
 
-INSERT INTO categories (name)
-SELECT 'Massage'
-    WHERE NOT EXISTS (SELECT 1 FROM categories WHERE name = 'Massage');
+INSERT INTO appointments (price, appointment_date, category_id, client_id, master_id, client_note, status)
+SELECT 50.00, now() + INTERVAL '1 day', 2, 2, 3, 'Хотел бы уточнить детали.', 'PENDING'
+WHERE NOT EXISTS (
+    SELECT 1 FROM appointments
+    WHERE appointment_date = now() + INTERVAL '1 day'
+  AND client_id = 2
+  AND master_id = 3
+  AND status = 'PENDING'
+    );
 
 INSERT INTO salon_reviews (rating, client_id, created_at, comment)
 SELECT 5, 2, NOW(), 'Отличный сервис!'
@@ -46,7 +52,7 @@ INSERT INTO notifications (is_read, created_at, user_id, message, notification_t
 SELECT false, now(), 2, 'Ваша запись подтверждена', 'APPOINTMENT'
     WHERE NOT EXISTS (
     SELECT 1 FROM notifications
-    WHERE user_id = 1 AND message = 'Ваша запись подтверждена'
+    WHERE user_id = 2 AND message = 'Ваша запись подтверждена'
 );
 
 INSERT INTO notifications (is_read, created_at, user_id, message, notification_type)
@@ -78,14 +84,5 @@ WHERE NOT EXISTS (
     WHERE user_id = 2 AND reason = 'Нарушение правил'
     );
 
-INSERT INTO appointments (price, appointment_date, category_id, client_id, master_id, client_note, status)
-SELECT 50.00, now() + INTERVAL '1 day', 1, 2, 3, 'Хотел бы уточнить детали.', 'PENDING'
-WHERE NOT EXISTS (
-    SELECT 1 FROM appointments
-    WHERE appointment_date = now() + INTERVAL '1 day'
-  AND client_id = 2
-  AND master_id = 3
-  AND status = 'PENDING'
-    );
 
 
