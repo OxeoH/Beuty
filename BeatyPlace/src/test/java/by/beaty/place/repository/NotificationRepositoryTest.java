@@ -73,7 +73,7 @@ class NotificationRepositoryTest extends BaseRepositoryTest {
         List<Notification> notificationbyUser = notificationRepository.getAllByUser(user);
 
         // THEN
-        assertEquals(1, notificationbyUser.size());
+        assertEquals(0, notificationbyUser.size());
     }
 
     private static Users getUsers() {

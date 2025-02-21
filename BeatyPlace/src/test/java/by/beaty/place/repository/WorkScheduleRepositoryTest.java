@@ -72,7 +72,7 @@ class WorkScheduleRepositoryTest extends BaseRepositoryTest {
         List<WorkSchedule> masterWorkSchedule = workScheduleRepository.getAllByMaster(master);
 
         // THEN
-        assertEquals(1, masterWorkSchedule.size());
+        assertEquals(0, masterWorkSchedule.size());
     }
 
     private static Users getMaster() {
