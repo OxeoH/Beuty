@@ -50,7 +50,7 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
         Users master = getUsers(3L);
         Users client = getUsers(2L);
         Category category = Category.builder()
-                .id(1L)
+                .id(3L)
                 .build();
         Appointment appointment = Appointment.builder()
                 .master(master)
