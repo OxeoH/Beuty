@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import by.beaty.place.model.Notification;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.NotificationType;
-import by.beaty.place.repository.config.BaseRepositoryTest;
+import by.beaty.place.config.BaseRepositoryTest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;

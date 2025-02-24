@@ -6,7 +6,7 @@ import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
-import by.beaty.place.repository.config.BaseRepositoryTest;
+import by.beaty.place.config.BaseRepositoryTest;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import by.beaty.place.model.Category;
-import by.beaty.place.repository.config.BaseRepositoryTest;
+import by.beaty.place.config.BaseRepositoryTest;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;

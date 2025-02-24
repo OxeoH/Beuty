@@ -1,4 +1,4 @@
-package by.beaty.place.repository.config;
+package by.beaty.place.config;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;

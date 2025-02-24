@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import by.beaty.place.model.BlackList;
 import by.beaty.place.model.Users;
-import by.beaty.place.repository.config.BaseRepositoryTest;
+import by.beaty.place.config.BaseRepositoryTest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
