@@ -104,7 +104,7 @@ class ExcelExporterImplTest {
 
         Row masterRow11 = sheet.getRow(11);
         assertEquals("Процент записей ТОП-3 мастеров", masterRow11.getCell(0).getStringCellValue());
-        assertEquals("100,00%", masterRow11.getCell(1).getStringCellValue());
+        assertEquals("100.00%", masterRow11.getCell(1).getStringCellValue());
 
         Row serviceRow1 = sheet.getRow(12);
         assertEquals("Услуга", serviceRow1.getCell(0).getStringCellValue());
