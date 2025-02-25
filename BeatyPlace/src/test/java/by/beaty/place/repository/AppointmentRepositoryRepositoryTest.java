@@ -2,11 +2,11 @@ package by.beaty.place.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import by.beaty.place.config.BaseRepositoryTest;
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
-import by.beaty.place.config.BaseRepositoryTest;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -90,6 +90,15 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
 
         // THEN
         assertEquals(1, appointmentByClient.size());
+    }
+
+    @Test
+    void getCountAppointmentsByMaster() {
+        // GIVEN | WHEN
+        Long countAppointmentsByMasterId = appointmentRepository.countAppointmentsByMasterId(3L);
+
+        // THEN
+        assertEquals(1, countAppointmentsByMasterId);
     }
 
     private static Users getUsers(long id) {

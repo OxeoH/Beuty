@@ -1,11 +1,12 @@
 package by.beaty.place.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import by.beaty.place.config.BaseRepositoryTest;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.Role;
-import by.beaty.place.config.BaseRepositoryTest;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -99,5 +100,14 @@ class UserRepositoryRepositoryTest extends BaseRepositoryTest {
 
         // THEN
         assertNotNull(userByEmail.get());
+    }
+
+    @Test
+    void getAllByRole() {
+        // GIVEN | WHEN
+        List<Users> allMasters = usersRepository.getAllByRole(Role.MASTER);
+
+        // THEN
+        assertEquals(1, allMasters.size());
     }
 }

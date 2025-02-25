@@ -4,6 +4,8 @@ import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Users;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -12,4 +14,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> getAppointmentByMaster(Users master);
 
     List<Appointment> getAppointmentByClient(Users client);
+
+    @Query("SELECT COUNT(a) FROM Appointment a WHERE a.master.id = :masterId")
+    Long countAppointmentsByMasterId(@Param("masterId") Long masterId);
+
+    @Query("SELECT a.category.name, COUNT(a) FROM Appointment a GROUP BY a.category.name")
+    List<Object[]> countAppointmentsByService();
+
+    @Query(value = "SELECT DATE(a.appointment_date), COUNT(a) FROM appointments a GROUP BY DATE(a.appointment_date)", nativeQuery = true)
+    List<Object[]> countAppointmentsByDate();
 }
