@@ -51,6 +51,9 @@ public class Users {
     @Column(nullable = false)
     private boolean emailVerified = false;
 
+    @Column(nullable = false)
+    private boolean locked = false;
+
     @Column(length = 6)
     private String verificationCode;
 
@@ -69,4 +72,3 @@ public class Users {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notifications;
 }
-

@@ -1,5 +1,6 @@
 package by.beaty.place.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,7 +11,11 @@ import by.beaty.place.model.common.Role;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -109,5 +114,24 @@ class UserRepositoryRepositoryTest extends BaseRepositoryTest {
 
         // THEN
         assertEquals(1, allMasters.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("userProvider")
+    void findByUsernameOrEmail(String username, String email) {
+        // GIVEN | WHEN
+        Optional<Users> userOpt = usersRepository.findByUsernameOrEmail(username, email);
+
+        // THEN
+        assertThat(userOpt).isPresent();
+        assertThat(userOpt.get().getUsername()).isEqualTo("master1");
+        assertThat(userOpt.get().getEmail()).isEqualTo("master@example.com");
+    }
+
+    private static Stream<Arguments> userProvider() {
+        return Stream.of(
+                Arguments.of("master1", "master@example.com"),
+                Arguments.of("nmmas123", "master@example.com")
+        );
     }
 }
