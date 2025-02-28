@@ -54,7 +54,7 @@ public class Users {
     @Column(nullable = false)
     private boolean locked = false;
 
-    @Column(length = 6)
+    @Column(length = 100)
     private String verificationCode;
 
     @Column
