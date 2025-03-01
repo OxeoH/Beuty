@@ -60,6 +60,6 @@ class CustomUserDetailsServiceTest {
                 () -> customUserDetailsService.loadUserByUsername(USERNAME));
 
         // THEN
-        assertEquals("User not found with username or email: username", usernameNotFoundException.getMessage());
+        assertEquals("Пользователь с логином или email не найден: username", usernameNotFoundException.getMessage());
     }
 }
