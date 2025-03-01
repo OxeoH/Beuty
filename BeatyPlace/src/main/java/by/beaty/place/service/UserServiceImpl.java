@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -86,24 +88,6 @@ public class UserServiceImpl implements UserServiceApi {
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(HOURS_CODE_EXPIRED));
     }
 
-    private static String generateVerificationCode(String email) {
-        int randomPart = RANDOM.nextInt(900000) + 100000;
-        String uuidPart = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6);
-        long timestampPart = System.currentTimeMillis() % 1000000;
-        String emailHashPart = hashEmail(email).substring(0, 6);
-        return uuidPart + randomPart + emailHashPart + timestampPart;
-    }
-
-    private static String hashEmail(String email) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(email.getBytes(StandardCharsets.UTF_8));
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Ошибка при хешировании email", e);
-        }
-    }
-
     @Override
     public Users getUserById(Long id) {
         Users userById = userRepository.findById(id)
@@ -132,11 +116,12 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
-    public void changePassword(Long userId, String newPassword) {
-        Users userById = getUserById(userId);
-        userById.setPassword(passwordEncoder.encode(newPassword));
-        log.info("Смена пароля для пользователя с идентификатором {} {}", userId, LocalDateTime.now());
-        userRepository.save(userById);
+    public void changePassword(String resetCode, String newPassword) {
+        Users userByResetCode = userRepository.findByResetCode(resetCode)
+                .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь с кодом %s не найден", resetCode)));
+        userByResetCode.setPassword(passwordEncoder.encode(newPassword));
+        log.info("Смена пароля для пользователя {}", LocalDateTime.now());
+        userRepository.save(userByResetCode);
     }
 
     @Override
@@ -187,6 +172,43 @@ public class UserServiceImpl implements UserServiceApi {
         return userRequestDtoList;
     }
 
+    @Override
+    public void sendResetCode(String email) {
+        Users user = userRepository.findByUsernameOrEmail(email, email)
+                .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь с email %s не найден", email)));
+
+        validateUserForPasswordReset(user);
+
+        String resetCode = generateVerificationCode(email);
+        updateUserResetCode(user, resetCode);
+
+        sendResetCodeByEmail(email, resetCode);
+    }
+
+    private void validateUserForPasswordReset(Users user) {
+        if (!user.isEmailVerified()) {
+            throw new DisabledException("Почта не верифицирована!");
+        }
+        if (user.isLocked()) {
+            throw new LockedException("Ваш аккаунт заблокирован, обратитесь в поддержку!");
+        }
+    }
+
+    private void updateUserResetCode(Users user, String resetCode) {
+        user.setResetCode(resetCode);
+        userRepository.save(user);
+        log.info("Код смены пароля установлен для пользователя: {}", user.getId());
+    }
+
+    private void sendResetCodeByEmail(String email, String resetCode) {
+        try {
+            verificationService.sendResetVerificationCode(email, resetCode);
+            log.info("Код смены пароля отправлен на email: {}", email);
+        } catch (MessagingException e) {
+            log.error("Ошибка при отправке кода смены пароля на {}: {}", email, e.getMessage(), e);
+        }
+    }
+
     private UserRequestDto getFromUser(Users user) {
         return UserRequestDto.builder()
                 .fullName(user.getFullName())
@@ -195,5 +217,23 @@ public class UserServiceImpl implements UserServiceApi {
                 .role(user.getRole())
                 .email(user.getEmail())
                 .build();
+    }
+
+    private static String generateVerificationCode(String email) {
+        int randomPart = RANDOM.nextInt(900000) + 100000;
+        String uuidPart = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6);
+        long timestampPart = System.currentTimeMillis() % 1000000;
+        String emailHashPart = hashEmail(email).substring(0, 6);
+        return uuidPart + randomPart + emailHashPart + timestampPart;
+    }
+
+    private static String hashEmail(String email) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(email.getBytes(StandardCharsets.UTF_8));
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Ошибка при хешировании email", e);
+        }
     }
 }

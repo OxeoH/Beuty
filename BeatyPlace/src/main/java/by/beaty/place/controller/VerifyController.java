@@ -28,4 +28,23 @@ public class VerifyController {
 
         return "user/loginPage";
     }
+
+    @GetMapping("/reset-password")
+    public String resetPassword(@RequestParam("token") String token, Model model) {
+
+        boolean verified = verificationService.verifyResetPasswordCode(token);
+
+        if (verified) {
+            model.addAttribute("resetCode", token);
+            return "user/resetPasswordPage";
+        }
+        model.addAttribute("tokenResetError", "Ошибка сервера, обратитесь в поддержку.");
+        return "user/loginPage";
+    }
+
+    @GetMapping("/cancel-recovery")
+    public String cancelRecoveryAccount(@RequestParam("token") String token) {
+        verificationService.cancelRecovery(token);
+        return "redirect:/";
+    }
 }

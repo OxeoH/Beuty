@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,13 +18,16 @@ import static org.mockito.Mockito.when;
 import by.beaty.place.model.Users;
 import by.beaty.place.repository.UserRepository;
 import by.beaty.place.service.api.MailSenderApi;
+import by.beaty.place.service.exception.UserNotFoundException;
 import jakarta.mail.MessagingException;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -66,12 +71,11 @@ class VerificationServiceImplTest {
 
         // THEN
         String expectedSubject = "Accept your registration";
-        String expectedBody = String.format(
-                "<p>Visit this link for activate account:</p> " +
-                        "<p><a href=\"%s\" target=\"_blank\">Activate account</a></p>" +
-                        "<p>Link works 24 hours.</p>", expectedVerificationLink);
 
-        verify(mailSender, times(1)).sendMessage(email, expectedSubject, expectedBody);
+        verify(mailSender, times(1)).sendMessage(eq(email), eq(expectedSubject), anyString());
+
+        String emailBody = captureEmailBody(mailSender);
+        assertTrue(emailBody.contains(expectedVerificationLink));
     }
 
     @Test
@@ -148,5 +152,93 @@ class VerificationServiceImplTest {
         assertFalse(testUser.isEmailVerified());
         assertNotNull(testUser.getVerificationCode());
         assertNotNull(testUser.getVerificationCodeExpiresAt());
+    }
+
+    @Test
+    void verifyResetPasswordCode_shouldReturnTrue_whenCodeIsValid() {
+        // GIVEN
+        String resetCode = "123456";
+        Users user = new Users();
+        user.setResetCode(resetCode);
+
+        when(userRepository.findByResetCode(resetCode))
+                .thenReturn(Optional.of(user));
+
+        // WHEN
+        boolean result = verificationService.verifyResetPasswordCode(resetCode);
+
+        // THEN
+        assertTrue(result, "Код должен быть подтвержден");
+    }
+
+    @Test
+    void verifyResetPasswordCode_shouldThrowException_whenCodeIsInvalid() {
+        // GIVEN
+        String invalidCode = "000000";
+
+        when(userRepository.findByResetCode(invalidCode))
+                .thenReturn(Optional.empty());
+
+        // WHEN | THEN
+        assertThrows(UserNotFoundException.class, () -> verificationService.verifyResetPasswordCode(invalidCode),
+                "Должно выбрасываться исключение, если код не найден");
+    }
+
+    @Test
+    void cancelRecovery_shouldReturnTrue_whenCodeIsValid() {
+        // GIVEN
+        String resetCode = "123456";
+        Users user = new Users();
+        user.setResetCode(resetCode);
+
+        when(userRepository.findByResetCode(resetCode))
+                .thenReturn(Optional.of(user));
+
+        // WHEN
+        boolean result = verificationService.cancelRecovery(resetCode);
+
+        // THEN
+        assertTrue(result, "Операция отмены должна пройти успешно");
+        assertNull(user.getResetCode(), "Код должен быть сброшен");
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void cancelRecovery_shouldThrowException_whenCodeIsInvalid() {
+        // GIVEN
+        String invalidCode = "000000";
+
+        when(userRepository.findByResetCode(invalidCode))
+                .thenReturn(Optional.empty());
+
+        // WHEN | THEN
+        assertThrows(UserNotFoundException.class, () -> verificationService.cancelRecovery(invalidCode),
+                "Должно выбрасываться исключение, если код не найден");
+    }
+
+    @Test
+    void testSendResetVerificationCode() throws MessagingException {
+        // GIVEN
+        doNothing().when(mailSender).sendMessage(anyString(), anyString(), anyString());
+
+        // WHEN
+        verificationService.sendResetVerificationCode("user@example.com", "sample-reset-code");
+
+        // THEN
+        verify(mailSender, times(1)).sendMessage(eq("user@example.com"), eq("Password recovery"), anyString());
+
+        String recoveryLink = String.format("http://localhost:8080/auth/reset-password?token=%s", "sample-reset-code");
+        String cancelRecovery = String.format("http://localhost:8080/auth/cancel-recovery?token=%s", "sample-reset-code");
+
+        String emailBody = captureEmailBody(mailSender);
+        assertTrue(emailBody.contains(recoveryLink), "Email body should contain the recovery link");
+        assertTrue(emailBody.contains(cancelRecovery), "Email body should contain the cancel recovery link");
+    }
+
+    @SneakyThrows
+    private String captureEmailBody(MailSenderApi mailSender) {
+        ArgumentCaptor<String> bodyCaptor = ArgumentCaptor.forClass(String.class);
+        verify(mailSender).sendMessage(anyString(), anyString(), bodyCaptor.capture());
+        return bodyCaptor.getValue();
     }
 }

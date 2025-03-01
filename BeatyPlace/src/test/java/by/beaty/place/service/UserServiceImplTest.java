@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -35,6 +36,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -258,24 +261,23 @@ class UserServiceImplTest {
     @Test
     void changePassword_WhenUserExists_ShouldUpdatePassword() {
         // GIVEN
-        Long userId = 1L;
+        String resetCode = "resetCode";
         String rawPassword = "newPassword123";
         String encodedPassword = "encodedPassword123";
 
         Users existingUser = Users.builder()
-                .id(userId)
                 .password("oldEncodedPassword")
                 .build();
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.findByResetCode(resetCode)).thenReturn(Optional.of(existingUser));
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
 
         // WHEN
-        userService.changePassword(userId, rawPassword);
+        userService.changePassword(resetCode, rawPassword);
 
         // THEN
         assertEquals(encodedPassword, existingUser.getPassword());
-        verify(userRepository).findById(userId);
+        verify(userRepository).findByResetCode(resetCode);
         verify(passwordEncoder).encode(rawPassword);
         verify(userRepository).save(existingUser);
     }
@@ -283,19 +285,19 @@ class UserServiceImplTest {
     @Test
     void changePassword_WhenUserDoesNotExist_ShouldThrowUserNotFoundException() {
         // GIVEN
-        Long userId = 2L;
+        String resetCode = "resetCode";
         String newPassword = "somePassword";
 
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        when(userRepository.findByResetCode(resetCode)).thenReturn(Optional.empty());
 
         // WHEN | THEN
         UserNotFoundException exception = assertThrows(
                 UserNotFoundException.class,
-                () -> userService.changePassword(userId, newPassword)
+                () -> userService.changePassword(resetCode, newPassword)
         );
 
-        assertEquals("Пользователь с идентификатором 2 не найден", exception.getMessage());
-        verify(userRepository).findById(userId);
+        assertEquals("Пользователь с кодом resetCode не найден", exception.getMessage());
+        verify(userRepository).findByResetCode(resetCode);
         verify(passwordEncoder, never()).encode(anyString());
         verify(userRepository, never()).save(any(Users.class));
     }
@@ -458,6 +460,67 @@ class UserServiceImplTest {
         // THEN
         assertTrue(result.isEmpty());
         verify(userRepository, times(1)).getAllByRole(Role.ADMIN);
+    }
+
+    @Test
+    void testSendResetCode_Success() throws MessagingException {
+        // GIVEN
+        Users user = Users.builder()
+                .fullName("User1")
+                .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(true)
+                .build();
+        when(userRepository.findByUsernameOrEmail(any(), any())).thenReturn(Optional.of(user));
+
+        doNothing().when(verificationService).sendResetVerificationCode(anyString(), anyString());
+
+        // WHEN
+        userService.sendResetCode("test");
+
+        verify(userRepository, times(1)).findByUsernameOrEmail("test", "test");
+        verify(verificationService, times(1)).sendResetVerificationCode(any(), any());
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    void testSendResetCode_UserNotFound() {
+        // GIVEN
+        when(userRepository.findByUsernameOrEmail(any(), any())).thenReturn(Optional.empty());
+
+        // WHEN | THEN
+        assertThrows(UserNotFoundException.class, () -> userService.sendResetCode("test"));
+    }
+
+    @Test
+    void testSendResetCode_EmailNotVerified() {
+        // GIVEN
+        Users user = Users.builder()
+                .fullName("User1")
+                .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(false)
+                .build();
+
+        when(userRepository.findByUsernameOrEmail(any(), any())).thenReturn(Optional.of(user));
+
+        // WHEN | THEN
+        assertThrows(DisabledException.class, () -> userService.sendResetCode("test"));
+    }
+
+    @Test
+    void testSendResetCode_UserLocked() {
+        // GIVEN
+        Users user = Users.builder()
+                .fullName("User1")
+                .role(Role.CLIENT)
+                .locked(true)
+                .emailVerified(true)
+                .build();
+        when(userRepository.findByUsernameOrEmail(any(), any())).thenReturn(Optional.of(user));
+
+        // WHEN | THEN
+        assertThrows(LockedException.class, () -> userService.sendResetCode("test"));
     }
 
     private UserRequestDto createUserRequestDto(String username, String email, String fullName, String password) {
