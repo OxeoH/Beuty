@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -35,5 +37,22 @@ public class UserController {
         }
 
         return "redirect:/login?success";
+    }
+
+    @GetMapping("/send-reset-password")
+    public String sendResetCodePage() {
+        return "user/sendResetPasswordPage";
+    }
+
+    @PostMapping("/send-reset-password")
+    public String sendResetCode(@RequestParam("email") String email) {
+        userService.sendResetCode(email);
+        return "redirect:/login?reset-password";
+    }
+
+    @PostMapping("/change-password/{resetCode}")
+    public String changePassword(@PathVariable("resetCode") String resetCode, @RequestParam("password") String password) {
+        userService.changePassword(resetCode, password);
+        return "redirect:/login?changed-password";
     }
 }

@@ -1,5 +1,7 @@
 package by.beaty.place.controller;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -78,5 +80,37 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/registrationPage"))
                 .andExpect(model().attribute("registrationError", "Пользователь с таким логином или email уже зарегистрирован"));
+    }
+
+    @Test
+    void testSendResetCodePage() throws Exception {
+        mockMvc.perform(get("/user/send-reset-password"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/sendResetPasswordPage"));
+    }
+
+    @Test
+    void testSendResetCode() throws Exception {
+        String email = "user@example.com";
+
+        mockMvc.perform(post("/user/send-reset-password")
+                        .param("email", email))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?reset-password"));
+
+        verify(userService, times(1)).sendResetCode(email);
+    }
+
+    @Test
+    void testChangePassword() throws Exception {
+        String resetCode = "sample-reset-code";
+        String newPassword = "new-password";
+
+        mockMvc.perform(post("/user/change-password/{resetCode}", resetCode)
+                        .param("password", newPassword))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login?changed-password"));
+
+        verify(userService, times(1)).changePassword(resetCode, newPassword);
     }
 }

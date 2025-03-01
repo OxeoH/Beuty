@@ -19,6 +19,12 @@
 <#if blockedMessage??>
   <p style="color: red;">${blockedMessage}</p>
 </#if>
+<#if resetPasswordMessage??>
+  <p style="color: red;">${resetPasswordMessage}</p>
+</#if>
+<#if tokenResetError??>
+  <p style="color: red;">${tokenResetError}</p>
+</#if>
 
 <form action="/login" method="post">
   <label>Логин или Email:</label>

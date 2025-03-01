@@ -16,7 +16,7 @@ public interface UserServiceApi {
 
     Users updateUser(Long id, UserRequestDto userRequestDto);
 
-    void changePassword(Long userId, String newPassword);
+    void changePassword(String resetCode, String newPassword);
 
     void blockUser(Long userId, Long blockedById, LocalDateTime blockedUntil, String reason);
 
@@ -25,4 +25,6 @@ public interface UserServiceApi {
     List<UserRequestDto> getAllUsers();
 
     List<UserRequestDto> getUsersByRole(Role role);
+
+    void sendResetCode(String email);
 }

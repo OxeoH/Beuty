@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +27,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Users {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,6 +56,9 @@ public class Users {
 
     @Column(length = 100)
     private String verificationCode;
+
+    @Column(length = 100)
+    private String resetCode;
 
     @Column
     private LocalDateTime verificationCodeExpiresAt;
