@@ -104,7 +104,7 @@ class VerificationServiceImplTest {
         // WHEN | THEN
         boolean result = verificationService.verifyEmail("validCode");
         assertTrue(result);
-        assertTrue(testUser.isEmailVerified());
+        assertTrue(testUser.getEmailVerified());
         assertNull(testUser.getVerificationCode());
         assertNull(testUser.getVerificationCodeExpiresAt());
         verify(userRepository, times(1)).save(testUser);
@@ -133,7 +133,7 @@ class VerificationServiceImplTest {
 
         // THEN
         assertFalse(result);
-        assertFalse(testUser.isEmailVerified());
+        assertFalse(testUser.getEmailVerified());
         assertNotNull(testUser.getVerificationCode());
         assertNotNull(testUser.getVerificationCodeExpiresAt());
     }
@@ -149,7 +149,7 @@ class VerificationServiceImplTest {
 
         // THEN
         assertFalse(result);
-        assertFalse(testUser.isEmailVerified());
+        assertFalse(testUser.getEmailVerified());
         assertNotNull(testUser.getVerificationCode());
         assertNotNull(testUser.getVerificationCodeExpiresAt());
     }

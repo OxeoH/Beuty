@@ -15,6 +15,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> getAppointmentByClient(Users client);
 
+    @Query("SELECT a FROM Appointment a WHERE a.client.username = :username or a.master.username = :username")
+    List<Appointment> getAppointmentByUsername(@Param("username") String username);
+
+    @Query("SELECT a FROM Appointment a WHERE (a.client.username = :username or a.master.username = :username) and a.category.id=:idCategory")
+    List<Appointment> getAppointmentByUsernameAndCategory(@Param("username") String username,
+            @Param("idCategory") Long idCategory);
+
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.master.id = :masterId")
     Long countAppointmentsByMasterId(@Param("masterId") Long masterId);
 
@@ -23,4 +30,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "SELECT DATE(a.appointment_date), COUNT(a) FROM appointments a GROUP BY DATE(a.appointment_date)", nativeQuery = true)
     List<Object[]> countAppointmentsByDate();
+
+    //TODO Проверить метод в тестах
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM appointments a WHERE a.id = :id AND "
+            + "a.client_id = (SELECT id FROM users WHERE username=:username))",
+            nativeQuery = true)
+    boolean hasUserAppointmentById(@Param("id") Long id, @Param("username") String username);
+
 }

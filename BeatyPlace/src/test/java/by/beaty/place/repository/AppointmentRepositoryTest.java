@@ -1,6 +1,7 @@
 package by.beaty.place.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import by.beaty.place.config.BaseRepositoryTest;
 import by.beaty.place.model.Appointment;
@@ -9,7 +10,6 @@ import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 
-class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
+class AppointmentRepositoryTest extends BaseRepositoryTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15")
@@ -58,7 +58,6 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
                 .price(BigDecimal.ZERO)
                 .status(AppointmentStatus.PENDING)
                 .category(category)
-                .appointmentDate(LocalDateTime.now())
                 .build();
         // WHEN
         appointmentRepository.save(appointment);
@@ -99,6 +98,13 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
 
         // THEN
         assertEquals(1, countAppointmentsByMasterId);
+    }
+
+    @Test
+    void hasUserAppointmentById() {
+        boolean hasUserAppointmentById = appointmentRepository.hasUserAppointmentById(1L, "client1");
+
+        assertTrue(hasUserAppointmentById);
     }
 
     private static Users getUsers(long id) {

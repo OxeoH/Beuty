@@ -1,5 +1,6 @@
 package by.beaty.place.model;
 
+import by.beaty.place.model.common.Role;
 import java.util.Collection;
 import java.util.List;
 import lombok.Builder;
@@ -13,6 +14,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class CustomUserDetails implements UserDetails {
 
     private final Users user;
+
+    public Long getId() {
+        return user.getId();
+    }
+
+    public boolean isAdmin() {
+        return user.getRole() == Role.ADMIN;
+    }
+
+    public boolean isMaster() {
+        return user.getRole() == Role.MASTER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,7 +49,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !user.isLocked();
+        return !user.getLocked();
     }
 
     @Override
@@ -46,6 +59,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEmailVerified();
+        return user.getEmailVerified();
     }
 }

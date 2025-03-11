@@ -72,15 +72,13 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private Users getUserFromDto(UserRequestDto requestDto) {
-        Users user = new Users();
-        user.setUsername(requestDto.getUsername());
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setFullName(requestDto.getFullName());
-        user.setRole(Role.CLIENT);
-        user.setEmailVerified(false);
-        user.setLocked(false);
-        return user;
+        return Users.builder()
+                .username(requestDto.getUsername())
+                .email(requestDto.getEmail())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
+                .fullName(requestDto.getFullName())
+                .role(Role.CLIENT)
+                .build();
     }
 
     private void fillVerificationCode(Users user, String code) {
@@ -186,10 +184,10 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private void validateUserForPasswordReset(Users user) {
-        if (!user.isEmailVerified()) {
+        if (Boolean.FALSE.equals(user.getEmailVerified())) {
             throw new DisabledException("Почта не верифицирована!");
         }
-        if (user.isLocked()) {
+        if (Boolean.TRUE.equals(user.getLocked())) {
             throw new LockedException("Ваш аккаунт заблокирован, обратитесь в поддержку!");
         }
     }

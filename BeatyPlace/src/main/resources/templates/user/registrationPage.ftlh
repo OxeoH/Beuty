@@ -1,38 +1,35 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-  <title>Регистрация</title>
-</head>
-<body>
-<h2>Регистрация</h2>
-<script>
-  <#if registrationError??>
-  alert('${registrationError?string}')
-  </#if>
-</script>
+<#import "../common/base.ftlh" as base>
+<#include "../common/security.ftlh">
 
-<form action="/user/registrations" method="post">
-  <label>Имя пользователя:</label>
-  <label>
-    <input type="text" name="fullName"/>
-  </label>
+<@base.page>
+  <h2>Регистрация</h2>
+  <script>
+    <#if registrationError??>
+    alert('${registrationError?string}')
+    </#if>
+  </script>
 
-  <label>Логин:</label>
-  <label>
-    <input type="text" name="username"/>
-  </label>
+  <form action="/user/registrations" method="post">
+    <label>Имя пользователя:</label>
+    <label>
+      <input type="text" name="fullName"/>
+    </label>
 
-  <label>Email:</label>
-  <label>
-    <input type="email" name="email"/>
-  </label>
+    <label>Логин:</label>
+    <label>
+      <input type="text" name="username"/>
+    </label>
 
-  <label>Пароль:</label>
-  <label>
-    <input type="password" name="password"/>
-  </label>
+    <label>Email:</label>
+    <label>
+      <input type="email" name="email"/>
+    </label>
 
-  <button type="submit">Зарегистрироваться</button>
-</form>
-</body>
-</html>
+    <label>Пароль:</label>
+    <label>
+      <input type="password" name="password"/>
+    </label>
+
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+</@base.page>

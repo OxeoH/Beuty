@@ -2,11 +2,11 @@ package by.beaty.place.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import by.beaty.place.config.BaseRepositoryTest;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.WorkSchedule;
-import by.beaty.place.config.BaseRepositoryTest;
-import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class WorkScheduleRepositoryTest extends BaseRepositoryTest {
         Users master = getMaster();
         WorkSchedule workSchedule = WorkSchedule.builder()
                 .master(master)
-                .dayOfWeek(DayOfWeek.FRIDAY)
+                .date(LocalDate.of(2025, 12, 11))
                 .startTime(LocalTime.of(9, 0))
                 .endTime(LocalTime.of(18, 0))
                 .build();
