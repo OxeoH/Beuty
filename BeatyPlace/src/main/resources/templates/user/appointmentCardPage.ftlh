@@ -99,10 +99,10 @@
 
           <div class="row form-group">
             <div class="col-md-12">
-              <label class="text-black" for="note">Примечание</label>
+              <label class="text-black" for="notes">Примечание</label>
                 <#if appointment??>
-                  <textarea name="note" id="note" cols="30" rows="5" class="form-control"
-                            placeholder="Введите примечание тут...">
+                  <textarea name="notes" id="notes" cols="30" rows="5" class="form-control"
+                            placeholder="Введите примечание тут..." readonly>
                     <#if appointment.clientNote??>
                         ${appointment.clientNote}
                     <#else>
@@ -110,7 +110,7 @@
                     </#if>
                 </textarea>
                 <#else>
-                  <textarea name="note" id="note" cols="30" rows="5" class="form-control"
+                  <textarea name="notes" id="notes" cols="30" rows="5" class="form-control"
                             placeholder="Введите примечание тут...">
                 </textarea>
                 </#if>
@@ -139,16 +139,48 @@
           <p class="mb-0"><a href="#">beautyplace1@gmail.com</a></p>
         </div>
 
-        <div class="p-4 mb-3 bg-white">
-          <h3 class="h5 text-black mb-3">Действие</h3>
-          <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о мастере</a></p>
-          <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о салоне</a></p>
-          <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Примечаине к записи</a></p>
-        </div>
-
+          <#if appointment??>
+            <div class="p-4 mb-3 bg-white">
+              <h3 class="h5 text-black mb-3">Действие</h3>
+              <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о мастере</a></p>
+              <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о салоне</a></p>
+              <p><a href="#" data-toggle="modal" data-target="#modalnotes" class="btn btn-primary px-4 py-2 text-white">
+                      <#if !appointment.clientNote?? || appointment.clientNote==''>Примечаине к записи<#else> Изменить примечание к записи</#if></a></p>
+            </div>
+          </#if>
       </div>
     </div>
   </div>
+
+    <#if appointment??>
+      <div class="modal fade" id="modalnotes" tabindex="-1" role="dialog" aria-labelledby="modalnotes"
+           aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="exampleModalLabel">Примечание к записи</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/appointment/create/note/${appointment.id}" method="post">
+                <div class="form-group">
+                  <label class="text-black" for="notes">Примечание</label>
+                  <textarea name="notes" id="notes" cols="30" rows="5" class="form-control"
+                            placeholder="Введите примечание тут...">
+                </textarea>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Записаться</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </#if>
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="/static/js/infoLoader.js"></script>

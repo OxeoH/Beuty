@@ -2,7 +2,7 @@
 <#include "../common/security.ftlh">
 
 <@base.page>
-    <#if not_found??>
+    <#if notFound??>
       <script>
         alert('У вас нет такой записи. Попробуйте еще раз.')
       </script>
@@ -11,6 +11,7 @@
     .fc-daygrid-event {
       white-space: pre-wrap !important;
     }
+
     .modal-content {
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -149,6 +150,7 @@
         });
       });
     </script>
+    <script src="/static/js/infoLoader.js"></script>
 
     <div class="modal fade" id="modaladdappointment" tabindex="-1" role="dialog" aria-labelledby="modaladdappointment"
          aria-hidden="true">
@@ -193,6 +195,13 @@
                   <option selected disabled>Сначала выберите мастера</option>
                 </select>
               </div>
+
+              <div class="form-group">
+                <label class="text-black" for="notes">Примечание</label>
+                <textarea name="notes" id="notes" cols="30" rows="5" class="form-control"
+                          placeholder="Введите примечание тут...">
+                </textarea>
+              </div>
               <button type="submit" class="btn btn-success btn-block">Записаться</button>
             </form>
           </div>
@@ -202,79 +211,5 @@
         </div>
       </div>
     </div>
-
-    <script>
-      $(document).ready(function () {
-        $('#idles').change(function () {
-          var categoryId = $(this).val();
-
-          $('#master').html('<option selected disabled>Выберите мастера</option>');
-          $('#time').html('<option selected disabled>Сначала выберите мастера</option>');
-
-          if (categoryId) {
-            $.ajax({
-              url: '/info/getMastersByCategory/' + categoryId,
-              type: 'GET',
-              success: function (response) {
-                if (response && response.length > 0) {
-                  response.forEach(function (master) {
-                    $('#master').append('<option name="masterId" value="' + master.id + '">' + master.fullName + '</option>');
-                  });
-                } else {
-                  $('#master').append('<option disabled>Нет доступных мастеров</option>');
-                }
-              }
-            });
-          }
-        });
-        $('#master, #inputDate').change(function () {
-          var masterId = $('#master').val();
-          var selectedDate = $('#inputDate').val();
-
-          if (masterId && selectedDate) {
-            $.ajax({
-              url: '/info/master/slot/available',
-              type: 'GET',
-              data: {masterId: masterId, date: selectedDate},
-              success: function (response) {
-                $('#time').html('<option selected disabled>Выберите свободное время</option>');
-                if (response.length > 0) {
-                  response.forEach(function (slot) {
-                    $('#time').append(
-                        '<option name="slotId" value="' + slot.id + '">' + slot.startTime + ' - ' + slot.endTime + '</option>');
-                  });
-                } else {
-                  $('#time').append('<option disabled>Нет свободных слотов</option>');
-                }
-              }
-            });
-          }
-        });
-        $('#idles').change(function () {
-          var categoryId = $(this).val();
-
-          if (categoryId) {
-            // Отправляем запрос на сервер для получения стоимости категории
-            $.ajax({
-              url: '/info/categoryPrice/' + categoryId, // Путь к серверному методу
-              type: 'GET',
-              success: function (response) {
-                // Если цена найдена, отображаем ее
-                if (response && response) {
-                  $('#categoryPrice').val(response);
-                } else {
-                  $('#categoryPrice').val('Цена не найдена');
-                }
-              },
-              error: function () {
-                $('#categoryPrice').val('Ошибка загрузки');
-              }
-            });
-          } else {
-            $('#categoryPrice').val('Выберите процедуру');
-          }
-        });
-      });
-    </script>
   </div>
 </@base.page>

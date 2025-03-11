@@ -111,6 +111,15 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
         return hasUserAppointmentById;
     }
 
+    @Override
+    @Transactional(value = "transactionManager")
+    public void createNoteAppointment(Long id, String note) {
+        Appointment appointmentById = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppointmentNotFoundException(String.format("Запись с идентификатором %s не найдена", id)));
+        appointmentById.setClientNote(note);
+        log.info("Установка примечания для записи {} {}", id, LocalDateTime.now());
+    }
+
     private void validateAppointmentRequest(AppointmentRequestDto appointmentRequestDto) {
         if (appointmentRequestDto.getClientId() == null ||
                 appointmentRequestDto.getMasterId() == null ||
@@ -133,6 +142,8 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
         WorkSchedule workSchedule = WorkSchedule.builder()
                 .id(appointmentRequestDto.getSlotId())
                 .build();
+
+        String notes = appointmentRequestDto.getNotes().isBlank() ? "-" : appointmentRequestDto.getNotes();
         return Appointment.builder()
                 .status(AppointmentStatus.PENDING)
                 .price(appointmentRequestDto.getPrice())
@@ -140,6 +151,7 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
                 .master(master)
                 .category(category)
                 .workSchedule(workSchedule)
+                .clientNote(notes)
                 .build();
     }
 }

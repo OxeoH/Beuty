@@ -12,7 +12,7 @@
             <h5 class="text-white font-weight-light text-uppercase">Добро пожаловать в BeautyPlace</h5>
             <h2 class="text-white font-weight-light mb-2 display-1">Лучший салон красоты.</h2>
 
-            <p><a href="/appointment/" class="btn btn-black py-3 px-5">Запишитесь прямо сейчас!</a></p>
+            <p><a href="/appointment/create/page" class="btn btn-black py-3 px-5">Запишитесь прямо сейчас!</a></p>
           </div>
         </div>
       </div>
@@ -26,7 +26,7 @@
           <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
             <h2 class="text-white font-weight-light mb-2 display-1">Красивые ВЫ, Здоровые ВЫ!</h2>
 
-            <p><a href="/appointment/" class="btn btn-black py-3 px-5">Запишитесь прямо сейчас!</a></p>
+            <p><a href="/appointment/create/page" class="btn btn-black py-3 px-5">Запишитесь прямо сейчас!</a></p>
           </div>
         </div>
       </div>

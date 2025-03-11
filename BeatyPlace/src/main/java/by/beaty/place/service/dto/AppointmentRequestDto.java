@@ -19,5 +19,5 @@ public class AppointmentRequestDto {
     private Long slotId;
     private Long clientId;
     private BigDecimal price;
-
+    private String notes;
 }

@@ -31,7 +31,7 @@ public class AppointmentController {
 
     //TODO Перейти на использование DTO
     @GetMapping("/")
-    public String calendarAppointmentPage(Model model) {
+    public String calendarAppointmentPage(@RequestParam(required = false, name = "not_found") String notFound, Model model) {
         String username = getCurrentUsername();
 
         List<Appointment> appointmentList = appointmentService.getAppointmentByUsername(username);
@@ -42,6 +42,10 @@ public class AppointmentController {
 
         model.addAttribute("appointments", appointmentList);
         model.addAttribute("categoryList", categoryList);
+
+        if (notFound != null) {
+            model.addAttribute("notFound", "notFoundMessage");
+        }
 
         return "user/calendarPage";
     }
@@ -69,7 +73,8 @@ public class AppointmentController {
     public String createAppointment(@RequestParam("idles") Long idCategory,
             @RequestParam("master") Long idMaster,
             @RequestParam("time") Long idSlot,
-            @RequestParam("price") BigDecimal price) {
+            @RequestParam("price") BigDecimal price,
+            @RequestParam(required = false, name = "notes") String notes) {
         Long currentIdUser = getCurrentIdUser();
         AppointmentRequestDto appointmentRequestDto = AppointmentRequestDto.builder()
                 .categoryId(idCategory)
@@ -77,6 +82,7 @@ public class AppointmentController {
                 .slotId(idSlot)
                 .clientId(currentIdUser)
                 .price(price)
+                .notes(notes)
                 .build();
         Appointment appointment = appointmentService.createAppointment(appointmentRequestDto);
         if (appointment != null) {
@@ -110,6 +116,17 @@ public class AppointmentController {
             model.addAttribute("categoryList", categoryList);
             return "user/appointmentCardPage";
         }
+        return "redirect:/appointment/?not_found";
+    }
+
+    @PostMapping("/create/note/{appointmentId}")
+    public String createNoteAppointment(@PathVariable("appointmentId") Long idAppointment, @RequestParam("notes") String notes) {
+        String currentUsername = getCurrentUsername();
+        if (appointmentService.hasAppointmentByUsername(idAppointment, currentUsername)) {
+            appointmentService.createNoteAppointment(idAppointment, notes);
+            return String.format("redirect:/appointment/%s", idAppointment);
+        }
+
         return "redirect:/appointment/?not_found";
     }
 
