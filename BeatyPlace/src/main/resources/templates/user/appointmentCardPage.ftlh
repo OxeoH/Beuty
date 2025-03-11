@@ -143,7 +143,7 @@
             <div class="p-4 mb-3 bg-white">
               <h3 class="h5 text-black mb-3">Действие</h3>
               <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о мастере</a></p>
-              <p><a href="#" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о салоне</a></p>
+              <p><a href="#" data-toggle="modal" data-target="#modalsalonreview" class="btn btn-primary px-4 py-2 text-white">Оставить отзыв о салоне</a></p>
               <p><a href="#" data-toggle="modal" data-target="#modalnotes" class="btn btn-primary px-4 py-2 text-white">
                       <#if !appointment.clientNote?? || appointment.clientNote==''>Примечаине к записи<#else> Изменить примечание к записи</#if></a></p>
             </div>
@@ -172,6 +172,37 @@
                 </textarea>
                 </div>
                 <button type="submit" class="btn btn-success btn-block">Записаться</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="modalsalonreview" tabindex="-1" role="dialog" aria-labelledby="modalsalonreview"
+           aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="exampleModalLabel">Отзыв о салоне</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/appointment/create/feedback/salon" method="post">
+                <div class="form-group">
+                  <label class="text-black" for="comment">Отзыв о салоне</label>
+                  <textarea name="comment" id="comment" cols="30" rows="5" class="form-control"
+                            placeholder="Введите отзыв тут..." required>
+                </textarea>
+                </div>
+                <div class="form-group">
+                  <label class="text-black" for="rating">Оцените салон:</label>
+                  <input name="rating" type="number" min="1" max="10" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Отправить</button>
               </form>
             </div>
             <div class="modal-footer">

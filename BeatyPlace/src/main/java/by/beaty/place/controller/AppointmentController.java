@@ -5,7 +5,9 @@ import by.beaty.place.model.Category;
 import by.beaty.place.model.CustomUserDetails;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
+import by.beaty.place.service.api.SalonReviewsServiceApi;
 import by.beaty.place.service.dto.AppointmentRequestDto;
+import by.beaty.place.service.dto.SalonReviewDto;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +30,8 @@ public class AppointmentController {
 
     private final AppointmentServiceApi appointmentService;
     private final CategoryServiceApi categoryService;
+    private final SalonReviewsServiceApi salonReviewsService;
+
 
     //TODO Перейти на использование DTO
     @GetMapping("/")
@@ -128,6 +132,21 @@ public class AppointmentController {
         }
 
         return "redirect:/appointment/?not_found";
+    }
+
+    @PostMapping("/create/feedback/salon")
+    public String feedbackSalon(@RequestParam("rating") Integer rating, @RequestParam("comment") String comment) {
+        Long currentIdUser = getCurrentIdUser();
+        SalonReviewDto salonReview = SalonReviewDto
+                .builder()
+                .rating(rating)
+                .clientId(currentIdUser)
+                .comment(comment)
+                .build();
+
+        salonReviewsService.createSalonReview(salonReview);
+
+        return "redirect:/";
     }
 
     private static String getCurrentUsername() {
