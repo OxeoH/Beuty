@@ -19,7 +19,7 @@
               <ul class="dropdown">
                   <#if categoryList??>
                       <#list categoryList as category>
-                        <li><a href="/category/${category.id}">${category.getName()}</a></li>
+                        <li><a href="/appointment/category/${category.id}">${category.getName()}</a></li>
                       </#list>
                   </#if>
               </ul>

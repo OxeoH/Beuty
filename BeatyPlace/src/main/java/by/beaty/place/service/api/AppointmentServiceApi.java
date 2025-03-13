@@ -21,7 +21,7 @@ public interface AppointmentServiceApi {
 
     Appointment getById(Long id);
 
-    boolean hasAppointmentByUsername(Long id, String username);
+    boolean hasAppointmentByClientId(Long id, Long idClient);
 
     void createNoteAppointment(Long id, String note);
 }

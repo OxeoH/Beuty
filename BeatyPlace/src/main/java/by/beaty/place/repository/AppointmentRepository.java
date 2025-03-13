@@ -31,10 +31,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "SELECT DATE(a.appointment_date), COUNT(a) FROM appointments a GROUP BY DATE(a.appointment_date)", nativeQuery = true)
     List<Object[]> countAppointmentsByDate();
 
-    //TODO Проверить метод в тестах
     @Query(value = "SELECT EXISTS (SELECT 1 FROM appointments a WHERE a.id = :id AND "
-            + "a.client_id = (SELECT id FROM users WHERE username=:username))",
+            + "a.client_id = :idClient)",
             nativeQuery = true)
-    boolean hasUserAppointmentById(@Param("id") Long id, @Param("username") String username);
-
+    boolean hasClientAppointmentById(@Param("id") Long id, @Param("idClient") Long idClient);
 }

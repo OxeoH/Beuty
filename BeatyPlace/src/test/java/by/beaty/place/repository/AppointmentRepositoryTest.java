@@ -102,7 +102,7 @@ class AppointmentRepositoryTest extends BaseRepositoryTest {
 
     @Test
     void hasUserAppointmentById() {
-        boolean hasUserAppointmentById = appointmentRepository.hasUserAppointmentById(1L, "client1");
+        boolean hasUserAppointmentById = appointmentRepository.hasClientAppointmentById(1L, 2L);
 
         assertTrue(hasUserAppointmentById);
     }

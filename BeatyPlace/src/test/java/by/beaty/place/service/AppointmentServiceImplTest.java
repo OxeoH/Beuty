@@ -67,6 +67,7 @@ class AppointmentServiceImplTest {
                 .masterId(2L)
                 .categoryId(3L)
                 .slotId(4L)
+                .notes("")
                 .price(BigDecimal.valueOf(1000.0))
                 .build();
         username = "testUser";

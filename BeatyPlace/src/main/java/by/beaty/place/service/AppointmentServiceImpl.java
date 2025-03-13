@@ -102,12 +102,12 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
     }
 
     @Override
-    public boolean hasAppointmentByUsername(Long id, String username) {
-        if (id == null || username.isBlank()) {
+    public boolean hasAppointmentByClientId(Long id, Long idClient) {
+        if (id == null || idClient == null) {
             throw new IllegalArgumentException("Некорректные данные, попробуйте еще раз.");
         }
-        boolean hasUserAppointmentById = appointmentRepository.hasUserAppointmentById(id, username);
-        log.info("Проверка есть ли запись по идентификатору {} у пользователя {} {}", id, username, LocalDateTime.now());
+        boolean hasUserAppointmentById = appointmentRepository.hasClientAppointmentById(id, idClient);
+        log.info("Проверка есть ли запись по идентификатору {} у пользователя {} {}", id, idClient, LocalDateTime.now());
         return hasUserAppointmentById;
     }
 

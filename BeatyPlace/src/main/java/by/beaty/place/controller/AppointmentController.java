@@ -109,8 +109,8 @@ public class AppointmentController {
 
     @GetMapping("/{appointmentId}")
     public String appointmentCardPage(@PathVariable("appointmentId") Long appointmentId, Model model) {
-        String username = getCurrentUsername();
-        boolean hasAppointmentByUsername = appointmentService.hasAppointmentByUsername(appointmentId, username);
+        Long currentIdUser = getCurrentIdUser();
+        boolean hasAppointmentByUsername = appointmentService.hasAppointmentByClientId(appointmentId, currentIdUser);
         if (hasAppointmentByUsername) {
             Appointment appointmentById = appointmentService.getById(appointmentId);
             String currentDate = getCurrentDate();
@@ -125,8 +125,8 @@ public class AppointmentController {
 
     @PostMapping("/create/note/{appointmentId}")
     public String createNoteAppointment(@PathVariable("appointmentId") Long idAppointment, @RequestParam("notes") String notes) {
-        String currentUsername = getCurrentUsername();
-        if (appointmentService.hasAppointmentByUsername(idAppointment, currentUsername)) {
+        Long currentIdUser = getCurrentIdUser();
+        if (appointmentService.hasAppointmentByClientId(idAppointment, currentIdUser)) {
             appointmentService.createNoteAppointment(idAppointment, notes);
             return String.format("redirect:/appointment/%s", idAppointment);
         }

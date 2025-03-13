@@ -124,6 +124,7 @@ class VerificationServiceImplTest {
     void testVerifyEmail_CodeExpired() {
         // GIVEN
         testUser.setVerificationCodeExpiresAt(LocalDateTime.now().minusHours(1));
+        testUser.setEmailVerified(false);
 
         when(userRepository.findByVerificationCode("validCode"))
                 .thenReturn(Optional.of(testUser));
@@ -141,6 +142,7 @@ class VerificationServiceImplTest {
     @Test
     void testVerifyEmail_CodeMismatch() {
         // GIVEN
+        testUser.setEmailVerified(false);
         when(userRepository.findByVerificationCode("wrongCode"))
                 .thenReturn(Optional.of(testUser));
 

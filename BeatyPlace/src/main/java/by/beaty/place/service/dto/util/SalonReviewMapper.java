@@ -6,13 +6,14 @@ import by.beaty.place.service.dto.SalonReviewDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class SalonReviewDtoMapper {
+public class SalonReviewMapper {
 
     public static SalonReviewDto fromEntity(SalonReview salonReview) {
         return SalonReviewDto.builder()
                 .id(salonReview.getId())
                 .clientId(salonReview.getClient().getId())
                 .comment(salonReview.getComment())
+                .rating(salonReview.getRating())
                 .createdAt(salonReview.getCreatedAt())
                 .build();
     }
