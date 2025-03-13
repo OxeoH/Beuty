@@ -49,10 +49,10 @@ public class Users {
     private Role role;
 
     @Column(nullable = false)
-    private boolean emailVerified = false;
+    private Boolean emailVerified = false;
 
     @Column(nullable = false)
-    private boolean locked = false;
+    private Boolean locked = false;
 
     @Column(length = 100)
     private String verificationCode;

@@ -323,7 +323,7 @@ class UserServiceImplTest {
         // THEN
         verify(blackListRepository).save(any(BlackList.class));
         verify(userRepository, times(1)).save(existingUser);
-        assertTrue(existingUser.isLocked());
+        assertTrue(existingUser.getLocked());
     }
 
     @Test
@@ -363,7 +363,7 @@ class UserServiceImplTest {
 
         // THEN
         verify(userRepository, times(1)).save(existingUser);
-        assertFalse(existingUser.isLocked());
+        assertFalse(existingUser.getLocked());
     }
 
     @Test

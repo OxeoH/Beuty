@@ -1,40 +1,39 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-  <title>Авторизация</title>
-</head>
-<body>
-<h2>Авторизация</h2>
-<#if message??>
-  <p style="color: red;">${message}</p>
-</#if>
-<#if errorMessage??>
-  <p style="color: red;">${errorMessage}</p>
-</#if>
+<#import "../common/base.ftlh" as base>
+<#include "../common/security.ftlh">
 
-<#if disabledMessage??>
-  <p style="color: red;">${disabledMessage}</p>
-</#if>
+<@base.page>
+  <h2>Авторизация</h2>
+    <#if message??>
+      <p style="color: red;">${message}</p>
+    </#if>
+    <#if errorMessage??>
+      <p style="color: red;">${errorMessage}</p>
+    </#if>
 
-<#if blockedMessage??>
-  <p style="color: red;">${blockedMessage}</p>
-</#if>
-<#if resetPasswordMessage??>
-  <p style="color: red;">${resetPasswordMessage}</p>
-</#if>
-<#if tokenResetError??>
-  <p style="color: red;">${tokenResetError}</p>
-</#if>
+    <#if disabledMessage??>
+      <p style="color: red;">${disabledMessage}</p>
+    </#if>
 
-<form action="/login" method="post">
-  <label>Логин или Email:</label>
-  <input type="text" name="username"/>
+    <#if blockedMessage??>
+      <p style="color: red;">${blockedMessage}</p>
+    </#if>
+    <#if resetPasswordMessage??>
+      <p style="color: red;">${resetPasswordMessage}</p>
+    </#if>
+    <#if tokenResetError??>
+      <p style="color: red;">${tokenResetError}</p>
+    </#if>
 
-  <label>Пароль:</label>
-  <input type="password" name="password"/>
+  <form action="/login" method="post">
+    <label>Логин или Email:</label>
+    <input type="text" name="username"/>
 
-  <button type="submit">Войти</button>
-</form>
+    <label>Пароль:</label>
+    <input type="password" name="password"/>
 
-</body>
-</html>
+    <button type="submit">Войти</button>
+  </form>
+  <a href="/user/registration">Регистрация</a>
+  <a href="/user/send-reset-password">Забыл пароль</a>
+
+</@base.page>

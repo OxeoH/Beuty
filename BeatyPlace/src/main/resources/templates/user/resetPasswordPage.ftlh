@@ -1,30 +1,27 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Смена пароля</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script>
-    function validatePasswords() {
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const errorMessage = document.getElementById("error-message");
+<#import "../common/base.ftlh" as base>
+<#include "../common/security.ftlh">
 
-      if (password !== confirmPassword) {
-        errorMessage.textContent = "Пароли не совпадают!";
-        return false;
-      }
+<@base.page>
+<script>
+  function validatePasswords() {
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const errorMessage = document.getElementById("error-message");
 
-      if (password.length < 8) {
-        errorMessage.textContent = "Пароль должен содержать минимум 8 символов!";
-        return false;
-      }
-
-      return true;
+    if (password !== confirmPassword) {
+      errorMessage.textContent = "Пароли не совпадают!";
+      return false;
     }
-  </script>
-</head>
+
+    if (password.length < 8) {
+      errorMessage.textContent = "Пароль должен содержать минимум 8 символов!";
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
 <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
 <div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
   <h3 class="text-center mb-3">Смена пароля</h3>
@@ -46,5 +43,4 @@
     <button type="submit" class="btn btn-primary w-100">Сменить пароль</button>
   </form>
 </div>
-</body>
-</html>
+</@base.page>

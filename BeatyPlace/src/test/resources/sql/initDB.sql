@@ -26,12 +26,11 @@ INSERT INTO categories (id, name)
 SELECT 4, 'Massage'
     WHERE NOT EXISTS (SELECT 1 FROM categories WHERE id = 4 OR name = 'Massage');
 
-INSERT INTO appointments (price, appointment_date, category_id, client_id, master_id, client_note, status)
-SELECT 50.00, now() + INTERVAL '1 day', 2, 2, 3, 'Хотел бы уточнить детали.', 'PENDING'
+INSERT INTO appointments (price, category_id, client_id, master_id, client_note, status)
+SELECT 50.00, 2, 2, 3, 'Хотел бы уточнить детали.', 'PENDING'
 WHERE NOT EXISTS (
     SELECT 1 FROM appointments
-    WHERE appointment_date = now() + INTERVAL '1 day'
-  AND client_id = 2
+    WHERE  client_id = 2
   AND master_id = 3
   AND status = 'PENDING'
     );

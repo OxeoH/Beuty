@@ -41,7 +41,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/user/**", "/auth/**").permitAll()
+                        .requestMatchers("/", "/about", "/services", "/login", "/user/**", "/auth/**", "/static/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/master/**").hasAnyRole("ADMIN", "MASTER")
                         .requestMatchers("/client/**").hasAnyRole("ADMIN", "MASTER", "CLIENT")
@@ -55,7 +55,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 )
                 .userDetailsService(customUserDetailsService);

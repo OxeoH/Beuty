@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="">
-<head>
-  <title>Восстановления пароля</title>
-</head>
-<body>
-<h2>Восстановления пароля</h2>
+<#import "../common/base.ftlh" as base>
+<#include "../common/security.ftlh">
 
-<form action="/user/send-reset-password" method="post">
+<@base.page>
+  <h2>Восстановления пароля</h2>
 
-  <label>Email:</label>
-  <label>
-    <input type="email" name="email"/>
-  </label>
+  <form action="/user/send-reset-password" method="post">
 
-  <button type="submit">Восстановить</button>
-</form>
-</body>
-</html>
+    <label>Email:</label>
+    <label>
+      <input type="email" name="email"/>
+    </label>
+
+    <button type="submit">Восстановить</button>
+  </form>
+</@base.page>
