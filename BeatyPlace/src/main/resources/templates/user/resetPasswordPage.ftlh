@@ -1,7 +1,18 @@
-<#import "../common/base.ftlh" as base>
-<#include "../common/security.ftlh">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/fonts/icomoon/style.css">
+  <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/css/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/loginStyle.css">
+  <link rel="icon" href="/static/images/logo.png">
 
-<@base.page>
+  <title>Авторизация</title>
+</head>
+<body>
 <script>
   function validatePasswords() {
     const password = document.getElementById("password").value;
@@ -22,25 +33,38 @@
   }
 </script>
 
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-<div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
-  <h3 class="text-center mb-3">Смена пароля</h3>
-  <form action="/user/change-password/${resetCode}" method="POST" onsubmit="return validatePasswords()">
-    <input type="hidden" name="token" value="{token}">
+<div class="d-lg-flex half">
+  <div class="bg order-1 order-md-2" style="background-image: url('/static/images/bg_reset_password_form.jpg');"></div>
+  <div class="contents order-2 order-md-1">
 
-    <div class="mb-3">
-      <label for="password" class="form-label">Новый пароль</label>
-      <input type="password" class="form-control" id="password" name="password" required>
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-7">
+          <h3>Смена пароля в <strong>BeatuPlace</strong></h3>
+          <form action="/user/change-password/${resetCode}" method="POST" onsubmit="return validatePasswords()">
+
+            <div class="form-group first">
+              <label for="newPass">Новый пароль</label>
+              <input type="password" class="form-control" placeholder="Новый пароль" id="newPass" name="password">
+            </div>
+            <div class="form-group last mb-3">
+              <label for="confirmPassword">Подтвердите пароль</label>
+              <input type="password" class="form-control" placeholder="Подтвердите пароль" id="confirmPassword">
+            </div>
+
+
+            <input type="submit" value="Сменить пароль" class="btn btn-block btn-primary">
+
+          </form>
+        </div>
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label for="confirmPassword" class="form-label">Подтвердите пароль</label>
-      <input type="password" class="form-control" id="confirmPassword" required>
-    </div>
-
-    <div id="error-message" class="text-danger mb-3"></div>
-
-    <button type="submit" class="btn btn-primary w-100">Сменить пароль</button>
-  </form>
+  </div>
 </div>
-</@base.page>
+
+<script src="/static/js/jquery-3.3.1.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/main.js"></script>
+</body>
+</html>

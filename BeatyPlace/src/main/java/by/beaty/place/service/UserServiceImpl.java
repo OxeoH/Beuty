@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserServiceApi {
 
         String verificationCode = generateVerificationCode(requestDto.getEmail());
         fillVerificationCode(user, verificationCode);
+        user.setEmailVerified(false);
+        user.setLocked(false);
         userRepository.save(user);
 
         try {
@@ -118,6 +120,7 @@ public class UserServiceImpl implements UserServiceApi {
         Users userByResetCode = userRepository.findByResetCode(resetCode)
                 .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь с кодом %s не найден", resetCode)));
         userByResetCode.setPassword(passwordEncoder.encode(newPassword));
+        userByResetCode.setResetCode(null);
         log.info("Смена пароля для пользователя {}", LocalDateTime.now());
         userRepository.save(userByResetCode);
     }
