@@ -40,7 +40,9 @@
               </#if>
             <li><a href="/services">Процедуры</a></li>
             <li><a href="/about">О нас</a></li>
-            <li><a href="/appointment/create/page">Записаться</a></li>
+              <#if isMaster>
+                <li><a href="/appointment/create/page">Записаться</a></li>
+              </#if>
             <li><a href="/contactus">Контакты</a></li>
           </ul>
         </nav>

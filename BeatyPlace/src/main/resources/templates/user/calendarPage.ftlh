@@ -51,10 +51,12 @@
     </div>
 
       <#if user??>
-        <a style="float: right; margin-bottom: 10px; color: white" class="btn btn-dark" data-toggle="modal"
-           data-target="#modaladdappointment">
-          <span style="color:white;font-weight: 700; font-size: 15px;">+</span>Записаться
-        </a>
+          <#if !isMaster>
+            <a style="float: right; margin-bottom: 10px; color: white" class="btn btn-dark" data-toggle="modal"
+               data-target="#modaladdappointment">
+              <span style="color:white;font-weight: 700; font-size: 15px;">+</span>Записаться
+            </a>
+          </#if>
       </#if>
 
     <select style="width: 20%;height: 30px;margin-bottom: 20px;" name="groupselector" onchange=""
