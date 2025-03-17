@@ -52,7 +52,7 @@ public class VerificationServiceImpl implements VerificationServiceApi {
                         "<p>This link will expire in 24 hours, so please activate your account as soon as possible.</p>" +
                         "</td></tr>" +
                         "<tr><td align=\"center\" style=\"padding: 20px 0; font-size: 12px; color: #aaa;\">" +
-                        "<p>&copy; 2025 YourCompany. All rights reserved.</p>" +
+                        "<p>&copy; 2025 BeautyPlace. All rights reserved.</p>" +
                         "</td></tr>" +
                         "</table>" +
                         "</body>" +
@@ -97,7 +97,7 @@ public class VerificationServiceImpl implements VerificationServiceApi {
                         +
                         "</td></tr>" +
                         "<tr><td align=\"center\" style=\"padding: 20px 0; font-size: 12px; color: #aaa;\">" +
-                        "<p>&copy; 2025 YourCompany. All rights reserved.</p>" +
+                        "<p>&copy; 2025 BeautyPlace. All rights reserved.</p>" +
                         "</td></tr>" +
                         "</table>" +
                         "</body>" +
