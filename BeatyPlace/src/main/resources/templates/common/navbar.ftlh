@@ -51,18 +51,24 @@
       <div class="col-6 col-xl-2 text-right" data-aos="fade-down">
         <div class="d-none d-xl-inline-block">
           <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
-            <li>
-              <a href="facebook.com" class="pl-0 pr-3 text-black"><span class="icon-facebook"></span></a>
-            </li>
-            <li>
-              <a href="x.com" class="pl-3 pr-3 text-black"><span class="icon-twitter"></span></a>
-            </li>
-            <li>
-              <a href="instagram.com" class="pl-3 pr-3 text-black"><span class="icon-instagram"></span></a>
-            </li>
-            <li>
-              <a href="youtube.com" class="pl-3 pr-3 text-black"><span class="icon-youtube-play"></span></a>
-            </li>
+              <#if !user??>
+                <li>
+                  <a href="/login" class="pl-3 pr-3 text-black"><span class="icon-user-circle"></span></a>
+                </li>
+              </#if>
+              <#if user??>
+                <li>
+                  <form action="/logout" method="post">
+                    <button type="submit" class="border-0 bg-transparent p-0">
+                      <span class="icon-exit_to_app"></span>
+                    </button>
+                  </form>
+
+                </li>
+                <li>
+                  <a href="/" class="pl-2 pr-2 text-black"><span class="icon-notifications"></span></a>
+                </li>
+              </#if>
           </ul>
         </div>
 
