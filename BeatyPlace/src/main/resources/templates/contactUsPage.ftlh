@@ -22,16 +22,16 @@
       <div class="row">
         <div class="col-md-7 mb-5">
 
-          <form action="#" class="p-5 bg-white">
+          <form action="/contactus" method="post" class="p-5 bg-white">
 
             <div class="row form-group">
               <div class="col-md-6 mb-3 mb-md-0">
                 <label class="text-black" for="fname">Имя</label>
-                <input type="text" id="fname" class="form-control">
+                <input type="text" id="fname" class="form-control" name="firstname">
               </div>
               <div class="col-md-6">
                 <label class="text-black" for="lname">Фамилия</label>
-                <input type="text" id="lname" class="form-control">
+                <input type="text" id="lname" class="form-control" name="lastname">
               </div>
             </div>
 
@@ -39,7 +39,7 @@
 
               <div class="col-md-12">
                 <label class="text-black" for="email">Email</label>
-                <input type="email" id="email" class="form-control">
+                <input type="email" id="email" class="form-control" name="email">
               </div>
             </div>
 
@@ -47,7 +47,7 @@
 
               <div class="col-md-12">
                 <label class="text-black" for="subject">Тема</label>
-                <input type="text" id="subject" class="form-control">
+                <input type="text" id="subject" class="form-control" name="subject">
               </div>
             </div>
 

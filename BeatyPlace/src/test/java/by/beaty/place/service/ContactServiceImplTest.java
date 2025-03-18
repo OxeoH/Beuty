@@ -33,6 +33,7 @@ class ContactServiceImplTest {
                 .lastname("Doe")
                 .email("john.doe@example.com")
                 .message("Hello!")
+                .subject("Subject")
                 .dateTimeSend(LocalDateTime.now())
                 .build();
 
@@ -47,8 +48,8 @@ class ContactServiceImplTest {
     void testGetAllContacts() {
         // GIVEN
         List<Contact> contacts = List.of(
-                new Contact(1L, "John", "Doe", "john.doe@example.com", "Hello!", LocalDateTime.now()),
-                new Contact(2L, "Jane", "Smith", "jane.smith@example.com", "Hi!", LocalDateTime.now())
+                new Contact(1L, "John", "Doe", "Subject", "john.doe@example.com", "Hello!", LocalDateTime.now()),
+                new Contact(2L, "Jane", "Smith", "Subject", "jane.smith@example.com", "Hi!", LocalDateTime.now())
         );
 
         when(contactRepository.findAll()).thenReturn(contacts);

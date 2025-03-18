@@ -28,5 +28,6 @@ public class Contact {
     private String lastname;
     private String email;
     private String message;
+    private String subject;
     private LocalDateTime dateTimeSend;
 }
