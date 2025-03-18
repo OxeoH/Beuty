@@ -83,5 +83,5 @@ WHERE NOT EXISTS (
     WHERE user_id = 2 AND reason = 'Нарушение правил'
     );
 
-
-
+insert into contacts(id, firstname, lastname,subject, email, message, date_time_send)
+values (777, 'TEST', 'TEST', 'TEST', 'TEST', 'TEST', '2020-09-15')
