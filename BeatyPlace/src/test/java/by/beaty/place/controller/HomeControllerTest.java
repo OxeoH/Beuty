@@ -4,12 +4,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import by.beaty.place.model.Category;
 import by.beaty.place.service.api.CategoryServiceApi;
+import by.beaty.place.service.api.ContactServiceApi;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -29,6 +31,8 @@ class HomeControllerTest {
 
     @Mock
     private CategoryServiceApi categoryServiceApi;
+    @Mock
+    private ContactServiceApi contactServiceApi;
 
     private MockMvc mockMvc;
 
@@ -98,5 +102,17 @@ class HomeControllerTest {
         mockMvc.perform(get("/contactus"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("contactUsPage"));
+    }
+
+    @Test
+    void testContactUsCreate() throws Exception {
+        mockMvc.perform(post("/contactus")
+                        .param("firstname", "John")
+                        .param("lastname", "Doe")
+                        .param("email", "john.doe@example.com")
+                        .param("message", "Hello!")
+                        .param("subject", "Test Subject"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/contactus"));
     }
 }

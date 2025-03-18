@@ -18,6 +18,7 @@ public class ContactServiceImpl implements ContactServiceApi {
 
     @Override
     public void saveContact(Contact contact) {
+        contact.setDateTimeSend(LocalDateTime.now());
         contactRepository.save(contact);
         log.info("Сохранение контактной формы {}", LocalDateTime.now());
     }

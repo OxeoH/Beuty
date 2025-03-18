@@ -50,6 +50,7 @@ class ContactRepositoryTest extends BaseRepositoryTest {
                 .lastname("Test")
                 .message("Test")
                 .email("Test")
+                .subject("Test")
                 .dateTimeSend(LocalDateTime.now())
                 .build();
 
