@@ -41,7 +41,8 @@
           <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
               <#if !user??>
                 <li>
-                  <a href="/login" class="pl-3 pr-3 text-black"><span class="icon-user-circle" style="font-size: 24px;"></span></a>
+                  <a href="/login" class="pl-3 pr-3 text-black"><span class="icon-user-circle"
+                                                                      style="font-size: 24px;"></span></a>
                 </li>
               </#if>
               <#if user??>
@@ -89,7 +90,7 @@
 
   <script src="/static/js/sockjs.min.js"></script>
   <script src="/static/js/stomp.min.js"></script>
-    <#if user?? && isMaster>
+    <#if user?? && (isMaster || isAdmin)>
       <script>
         document.addEventListener('DOMContentLoaded', function () {
           const socket = new SockJS('/ws');
@@ -145,6 +146,49 @@
             localStorage.setItem('notifications', JSON.stringify(allNotifications));
           }
 
+          function markAsRead(notificationId) {
+            fetch(`http://localhost:8080/api/notifications/read/` + notificationId, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => {
+              if (response.ok) {
+                console.log(`Notification marked as read`);
+              } else {
+                console.error(`Failed to mark notification as read`);
+              }
+            })
+            .catch(error => {
+              console.error('Error marking notification as read:', error);
+            });
+          }
+
+          function fetchUnreadNotifications() {
+            fetch(`http://localhost:8080/api/notifications/unread/${currentUserId}`)
+            .then(response => response.json())
+            .then(unreadNotifications => {
+              if (unreadNotifications && unreadNotifications.length > 0) {
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
+                if (!notifications[currentUserId]) {
+                  notifications[currentUserId] = [];
+                }
+
+                unreadNotifications.forEach(notification => {
+                  notifications[currentUserId].push({...notification, isRead: false});
+                });
+
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotificationCount(notifications[currentUserId].filter(n => !n.isRead).length);
+                renderNotifications(notifications[currentUserId]);
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching unread notifications:', error);
+            });
+          }
+
           stompClient.connect({}, function () {
             stompClient.subscribe(`/user/${currentUserId}/topic/notifications`, function (messageOutput) {
               const notification = messageOutput.body;
@@ -163,10 +207,11 @@
 
               notifications[currentUserId].push(parsedNotification);
               localStorage.setItem('notifications', JSON.stringify(notifications));
-
+              markAsRead(parsedNotification.id);
               updateNotificationCount(notifications[currentUserId].length);
               renderNotifications(notifications[currentUserId]);
             });
+            fetchUnreadNotifications();
           });
 
           notificationBell.addEventListener('click', function (event) {
@@ -176,7 +221,6 @@
 
           loadNotifications();
         });
-
       </script>
     </#if>
 </header>

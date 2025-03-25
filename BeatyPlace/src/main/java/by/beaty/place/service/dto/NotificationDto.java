@@ -14,6 +14,7 @@ import lombok.Setter;
 @Builder
 public class NotificationDto {
 
+    private Long id;
     private Long toUserId;
     private String message;
     private NotificationType notificationType;
