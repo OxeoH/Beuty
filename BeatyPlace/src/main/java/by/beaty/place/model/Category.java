@@ -42,4 +42,3 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "master_id"))
     private List<Users> masters;
 }
-

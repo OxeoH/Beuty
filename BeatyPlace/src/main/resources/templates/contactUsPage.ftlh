@@ -21,33 +21,40 @@
     <div class="container">
       <div class="row">
         <div class="col-md-7 mb-5">
-
-          <form action="/contactus" method="post" class="p-5 bg-white">
+          <form action="/contactus" method="post" class="p-5 bg-white" onsubmit="return validateForm()">
 
             <div class="row form-group">
               <div class="col-md-6 mb-3 mb-md-0">
                 <label class="text-black" for="fname">Имя</label>
-                <input type="text" id="fname" class="form-control" name="firstname">
+                <input type="text" id="fname" class="form-control" name="firstname" required
+                       pattern="^(?!\s*$)[A-Za-zА-Яа-яЁё\s]{2,}$"
+                       title="Введите минимум 2 буквы. Только буквы и пробелы, не только пробелы.">
+                <small class="form-text text-muted">Минимум 2 буквы, только буквы и пробелы.</small>
               </div>
               <div class="col-md-6">
                 <label class="text-black" for="lname">Фамилия</label>
-                <input type="text" id="lname" class="form-control" name="lastname">
+                <input type="text" id="lname" class="form-control" name="lastname" required
+                       pattern="^(?!\s*$)[A-Za-zА-Яа-яЁё\s]{2,}$"
+                       title="Введите минимум 2 буквы. Только буквы и пробелы, не только пробелы.">
+                <small class="form-text text-muted">Минимум 2 буквы, только буквы и пробелы.</small>
               </div>
             </div>
 
             <div class="row form-group">
-
               <div class="col-md-12">
                 <label class="text-black" for="email">Email</label>
-                <input type="email" id="email" class="form-control" name="email">
+                <input type="email" id="email" class="form-control" name="email" required>
+                <small class="form-text text-muted">Введите корректный email.</small>
               </div>
             </div>
 
             <div class="row form-group">
-
               <div class="col-md-12">
                 <label class="text-black" for="subject">Тема</label>
-                <input type="text" id="subject" class="form-control" name="subject">
+                <input type="text" id="subject" class="form-control" name="subject" required
+                       pattern="^(?!\s*$).{3,}$"
+                       title="Введите минимум 3 символа, не только пробелы.">
+                <small class="form-text text-muted">Минимум 3 символа, не только пробелы.</small>
               </div>
             </div>
 
@@ -55,16 +62,16 @@
               <div class="col-md-12">
                 <label class="text-black" for="message">Сообщение</label>
                 <textarea name="message" id="message" cols="30" rows="7" class="form-control"
-                          placeholder="Напишите ваше сообщение тут..."></textarea>
+                          placeholder="Напишите ваше сообщение тут..." required></textarea>
+                <small class="form-text text-muted" id="messageError" style="color: red; display: none;">Сообщение должно содержать минимум 10 символов.</small>
               </div>
             </div>
 
             <div class="row form-group">
               <div class="col-md-12">
-                <input type="submit" value="Отправить" class="btn btn-primary py-2 px-4 text-white">
+                <input type="submit" value="Отправить" class="btn btn-black py-3 px-5">
               </div>
             </div>
-
 
           </form>
         </div>
@@ -84,11 +91,26 @@
           <div class="p-4 mb-3 bg-white">
             <h3 class="h5 text-black mb-3">Детальная информации</h3>
             <p>НЕ БОЛЬШАЯ ИНФОРМАЦИЯ О САЛОНЕ</p>
-            <p><a href="/about" class="btn btn-primary px-4 py-2 text-white">Подробнее</a></p>
+            <p><a href="/about" class="btn btn-black py-3 px-5">Подробнее</a></p>
           </div>
 
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    function validateForm() {
+      let message = document.getElementById("message").value.trim();
+      let messageError = document.getElementById("messageError");
+
+      if (message.length < 10) {
+        messageError.style.display = "block";
+        return false;
+      } else {
+        messageError.style.display = "none";
+        return true;
+      }
+    }
+  </script>
 </@base.page>

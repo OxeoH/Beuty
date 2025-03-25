@@ -45,15 +45,20 @@
 
             <div class="form-group first">
               <label for="newPass">Новый пароль</label>
-              <input type="password" class="form-control" placeholder="Новый пароль" id="newPass" name="password">
+              <input required type="password" class="form-control" placeholder="Новый пароль" id="newPass" name="password"
+                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                     title="Пароль должен содержать минимум 8 символов, включая хотя бы одну цифру, одну заглавную и одну строчную букву.">
+              <small class="form-text text-muted">Минимум 8 символов, одна цифра, одна заглавная и одна строчная буква.</small>
             </div>
+
             <div class="form-group last mb-3">
               <label for="confirmPassword">Подтвердите пароль</label>
-              <input type="password" class="form-control" placeholder="Подтвердите пароль" id="confirmPassword">
+              <input required type="password" class="form-control" placeholder="Подтвердите пароль" id="confirmPassword">
+              <small class="form-text text-muted" id="passwordError" style="color: red; display: none;">Пароли не совпадают.</small>
             </div>
 
 
-            <input type="submit" value="Сменить пароль" class="btn btn-block btn-primary">
+            <input type="submit" value="Сменить пароль" class="btn btn-block btn-dark">
 
           </form>
         </div>

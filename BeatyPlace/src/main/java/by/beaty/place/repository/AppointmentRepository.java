@@ -35,4 +35,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             + "a.client_id = :idClient)",
             nativeQuery = true)
     boolean hasClientAppointmentById(@Param("id") Long id, @Param("idClient") Long idClient);
+
+    //TODO Тест
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM appointments a WHERE a.id = :id AND "
+            + "a.master_id = :idMaster)",
+            nativeQuery = true)
+    boolean hasMasterAppointmentById(@Param("id") Long id, @Param("idMaster") Long idMaster);
 }

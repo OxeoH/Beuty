@@ -25,13 +25,16 @@
 
             <div class="form-group last mb-3">
               <label for="email">Email</label>
-              <input type="email" class="form-control" placeholder="Ваш email" id="email" name="email">
+              <input type="email" class="form-control" placeholder="Ваш email" id="email" name="email"
+                     required title="Введите корректный email.">
+              <small class="form-text text-muted">Введите корректный email (пример: user@example.com).</small>
             </div>
 
-            <input type="submit" value="Восстановить" class="btn btn-block btn-primary">
+            <input type="submit" value="Восстановить" class="btn btn-block btn-dark">
 
           </form>
         </div>
+
       </div>
     </div>
   </div>

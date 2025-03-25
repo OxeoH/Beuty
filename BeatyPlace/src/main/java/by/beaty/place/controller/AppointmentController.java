@@ -110,8 +110,24 @@ public class AppointmentController {
     @GetMapping("/{appointmentId}")
     public String appointmentCardPage(@PathVariable("appointmentId") Long appointmentId, Model model) {
         Long currentIdUser = getCurrentIdUser();
-        boolean hasAppointmentByUsername = appointmentService.hasAppointmentByClientId(appointmentId, currentIdUser);
-        if (hasAppointmentByUsername) {
+        boolean hasUserAppointmentById = appointmentService.hasAppointmentByClientId(appointmentId, currentIdUser);
+        if (hasUserAppointmentById) {
+            Appointment appointmentById = appointmentService.getById(appointmentId);
+            String currentDate = getCurrentDate();
+            List<Category> categoryList = categoryService.getAll();
+            model.addAttribute("appointment", appointmentById);
+            model.addAttribute("currentDate", currentDate);
+            model.addAttribute("categoryList", categoryList);
+            return "user/appointmentCardPage";
+        }
+        return "redirect:/appointment/?not_found";
+    }
+
+    @GetMapping("/master/{appointmentId}")
+    public String appointmentCardForMasterPage(@PathVariable("appointmentId") Long appointmentId, Model model) {
+        Long currentIdUser = getCurrentIdUser();
+        boolean hasMasterAppointmentById = appointmentService.hasMasterAppointmentById(appointmentId, currentIdUser);
+        if (hasMasterAppointmentById) {
             Appointment appointmentById = appointmentService.getById(appointmentId);
             String currentDate = getCurrentDate();
             List<Category> categoryList = categoryService.getAll();

@@ -52,9 +52,8 @@
 
       <#if user??>
           <#if !isMaster>
-            <a style="float: right; margin-bottom: 10px; color: white" class="btn btn-dark" data-toggle="modal"
-               data-target="#modaladdappointment">
-              <span style="color:white;font-weight: 700; font-size: 15px;">+</span>Записаться
+            <a style="float: right;" class="btn btn-black" href="/appointment/create/page">
+              Записаться
             </a>
           </#if>
       </#if>
@@ -72,14 +71,16 @@
           <#list appointments as app>
             <span style="display: none" class="tooltip" id="title">
             Процедура: ${app.category.name} <br>
-            Мастер: ${app.master.fullName} <br>
+            <#if isMaster>Клиент: ${app.client.fullName}
+            <#else>Мастер: ${app.master.fullName}
+            </#if>
             Статус: ${app.status.getName()} <br>
             Время: ${app.workSchedule.date} <br>
             Примечание: <#if app.clientNote??>${app.clientNote}<#else>-</#if>
           </span>
             <span style="display: none" id="start">${app.workSchedule.date} ${app.workSchedule.startTime}</span>
             <span style="display: none" id="end">${app.workSchedule.date} ${app.workSchedule.endTime}</span>
-            <span style="display: none" id="url">/appointment/${app.id}</span>
+            <span style="display: none" id="url">/appointment/<#if isMaster>master/</#if>${app.id}</span>
             <span style="display: none" data-toggle="tooltip" data-placement="top" id="description" class="tooltiptext">
                  Стоимость: ${app.price}
             </span>
@@ -135,7 +136,6 @@
           eventBackgroundColor: '#388E3C',
           events: eventlists
         });
-
         calendar.render();
       });
 

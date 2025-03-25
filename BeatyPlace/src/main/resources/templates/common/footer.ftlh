@@ -4,7 +4,8 @@
       <div class="col-lg-4">
         <div class="mb-5">
           <h3 class="footer-heading mb-4">О BeautyPlace</h3>
-          <p>ЧТО ТО ПРО НАС</p>
+          <p>BeautyPlace — место, где профессиональный уход и стиль сочетаются с качеством. Доверьте нам свою красоту!
+          </p>
         </div>
       </div>
       <div class="col-lg-4 mb-5 mb-lg-0">
