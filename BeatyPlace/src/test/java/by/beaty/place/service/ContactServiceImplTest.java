@@ -1,10 +1,12 @@
 package by.beaty.place.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import by.beaty.place.kafka.service.api.KafkaSender;
 import by.beaty.place.model.Contact;
 import by.beaty.place.repository.ContactRepository;
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ class ContactServiceImplTest {
 
     @Mock
     private ContactRepository contactRepository;
+    @Mock
+    private KafkaSender kafkaSender;
 
     @InjectMocks
     private ContactServiceImpl contactService;
@@ -42,6 +46,7 @@ class ContactServiceImplTest {
 
         // THEN
         verify(contactRepository, times(1)).save(contact);
+        verify(kafkaSender, times(1)).sendNotification(any());
     }
 
     @Test

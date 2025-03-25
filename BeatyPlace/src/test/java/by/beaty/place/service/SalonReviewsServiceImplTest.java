@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import by.beaty.place.kafka.service.api.KafkaSender;
 import by.beaty.place.model.SalonReview;
 import by.beaty.place.model.Users;
 import by.beaty.place.repository.SalonReviewRepository;
@@ -25,6 +26,8 @@ class SalonReviewsServiceImplTest {
 
     @Mock
     private SalonReviewRepository salonReviewRepository;
+    @Mock
+    private KafkaSender kafkaSender;
 
     @InjectMocks
     private SalonReviewsServiceImpl salonReviewService;
@@ -81,5 +84,6 @@ class SalonReviewsServiceImplTest {
 
         // THEN
         verify(salonReviewRepository, times(1)).save(any(SalonReview.class));
+        verify(kafkaSender, times(1)).sendNotification(any());
     }
 }

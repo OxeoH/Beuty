@@ -11,6 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import by.beaty.place.kafka.service.api.KafkaSender;
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
@@ -40,6 +41,8 @@ class AppointmentServiceImplTest {
     private CategoryServiceApi categoryService;
     @Mock
     private WorkScheduleServiceApi workScheduleServiceApi;
+    @Mock
+    private KafkaSender kafkaSender;
 
     @InjectMocks
     private AppointmentServiceImpl appointmentService;
@@ -273,6 +276,7 @@ class AppointmentServiceImplTest {
         assertEquals(appointmentRequestDto.getPrice(), createdAppointment.getPrice());
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
         verify(workScheduleServiceApi, times(1)).updateStatusWorkSchedule(appointmentRequestDto.getSlotId(), SlotStatus.BOOKED);
+        verify(kafkaSender, times(1)).sendNotification(any());
     }
 
     @Test

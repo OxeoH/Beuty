@@ -1,6 +1,7 @@
 package by.beaty.place.kafka.service;
 
 import by.beaty.place.kafka.service.api.KafkaSender;
+import by.beaty.place.service.dto.NotificationDto;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class KafkaSenderImpl implements KafkaSender {
     @Value("${notification-topic}")
     private String topic;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, NotificationDto> kafkaTemplateNotification;
 
     @Transactional("kafkaTransactionManager")
     public void sendMessage(String message) {
@@ -55,4 +57,34 @@ public class KafkaSenderImpl implements KafkaSender {
             throw new RuntimeException("Transaction failed for topic " + topic, e);
         }
     }
+
+    @Transactional("kafkaTransactionManager")
+    public void sendNotification(NotificationDto notification) {
+        kafkaTemplateNotification.executeInTransaction(kafkaTemplate -> {
+            sendWithRetry(kafkaTemplateNotification, notification, 3);
+            return null;
+        });
+    }
+
+    private void sendWithRetry(KafkaTemplate<String, NotificationDto> kafkaTemplate, NotificationDto notification, int retries) {
+        kafkaTemplate.send(topic, String.valueOf(notification.getToUserId()), notification)
+                .whenComplete((result, ex) -> {
+                    if (ex == null) {
+                        log.info("Notification sent successfully to Kafka: {}", notification);
+                    } else {
+                        log.error("Failed to send notification: {}, retries left: {}", notification, retries);
+                        if (retries > 0) {
+                            try {
+                                Thread.sleep(100);
+                                sendWithRetry(kafkaTemplate, notification, retries - 1);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        } else {
+                            log.error("All retries exhausted for notification: {}", notification);
+                        }
+                    }
+                });
+    }
+
 }

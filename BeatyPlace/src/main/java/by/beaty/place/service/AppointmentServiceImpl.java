@@ -1,16 +1,20 @@
 package by.beaty.place.service;
 
+import by.beaty.place.kafka.service.api.KafkaSender;
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.WorkSchedule;
 import by.beaty.place.model.common.AppointmentStatus;
+import by.beaty.place.model.common.NotificationType;
 import by.beaty.place.model.common.SlotStatus;
 import by.beaty.place.repository.AppointmentRepository;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
 import by.beaty.place.service.api.WorkScheduleServiceApi;
 import by.beaty.place.service.dto.AppointmentRequestDto;
+import by.beaty.place.service.dto.NotificationDto;
+import by.beaty.place.service.dto.NotificationMessage;
 import by.beaty.place.service.dto.UserRequestDto;
 import by.beaty.place.service.exception.AppointmentNotFoundException;
 import java.time.LocalDateTime;
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -30,6 +35,7 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
     private final AppointmentRepository appointmentRepository;
     private final CategoryServiceApi categoryService;
     private final WorkScheduleServiceApi workScheduleServiceApi;
+    private final KafkaSender kafkaSender;
 
     @Override
     public List<Appointment> getAppointmentByMaster(UserRequestDto master) {
@@ -83,15 +89,33 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
     }
 
     @Override
-    @Transactional(value = "transactionManager", isolation = Isolation.REPEATABLE_READ)
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     public Appointment createAppointment(AppointmentRequestDto appointmentRequestDto) {
         validateAppointmentRequest(appointmentRequestDto);
-        Appointment appointment = mapToAppointmentEntity(appointmentRequestDto);
-        Appointment savedAppointment = appointmentRepository.save(appointment);
-        log.info("Сохранение записи клиента {}", LocalDateTime.now());
-        workScheduleServiceApi.updateStatusWorkSchedule(appointmentRequestDto.getSlotId(), SlotStatus.BOOKED);
-        return savedAppointment;
+
+        try {
+            workScheduleServiceApi.updateStatusWorkSchedule(appointmentRequestDto.getSlotId(), SlotStatus.BOOKED);
+
+            Appointment appointment = mapToAppointmentEntity(appointmentRequestDto);
+            Appointment savedAppointment = appointmentRepository.save(appointment);
+            log.info("Сохранена запись клиента {} в {}", appointment.getClient().getFullName(), LocalDateTime.now());
+
+            NotificationDto notification = NotificationDto.builder()
+                    .notificationType(NotificationType.CONTACT)
+                    .message(String.format(NotificationMessage.APPOINTMENT.getMessage(), appointment.getWorkSchedule().getDate(),
+                            appointment.getClient().getFullName()))
+                    .toUserId(appointmentRequestDto.getMasterId())
+                    .build();
+            kafkaSender.sendNotification(notification);
+            log.info("Уведомление отправлено мастеру с ID {}", appointmentRequestDto.getMasterId());
+
+            return savedAppointment;
+        } catch (Exception e) {
+            log.error("Ошибка при создании записи клиента: {}", e.getMessage(), e);
+            throw new RuntimeException("Не удалось создать запись", e);
+        }
     }
+
 
     @Override
     public Appointment getById(Long id) {
@@ -111,6 +135,17 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
         return hasUserAppointmentById;
     }
 
+    //TODO Тест
+    @Override
+    public boolean hasMasterAppointmentById(Long id, Long idMaster) {
+        if (id == null || idMaster == null) {
+            throw new IllegalArgumentException("Некорректные данные, попробуйте еще раз.");
+        }
+        boolean hasMasterAppointmentById = appointmentRepository.hasMasterAppointmentById(id, idMaster);
+        log.info("Проверка есть ли запись по идентификатору {} у мастера {} {}", id, idMaster, LocalDateTime.now());
+        return hasMasterAppointmentById;
+    }
+
     @Override
     @Transactional(value = "transactionManager")
     public void createNoteAppointment(Long id, String note) {
@@ -118,6 +153,14 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
                 .orElseThrow(() -> new AppointmentNotFoundException(String.format("Запись с идентификатором %s не найдена", id)));
         appointmentById.setClientNote(note);
         log.info("Установка примечания для записи {} {}", id, LocalDateTime.now());
+        Long masterId = appointmentById.getMaster().getId();
+        NotificationDto notification = NotificationDto.builder()
+                .notificationType(NotificationType.CONTACT)
+                .message(String.format(NotificationMessage.CLIENT_NOTE.getMessage(), appointmentById.getWorkSchedule().getDate()))
+                .toUserId(masterId)
+                .build();
+        kafkaSender.sendNotification(notification);
+        log.info("Уведомление отправлено мастеру с ID {}", masterId);
     }
 
     private void validateAppointmentRequest(AppointmentRequestDto appointmentRequestDto) {

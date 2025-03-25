@@ -59,4 +59,9 @@ public class HomeController {
         contactServiceApi.saveContact(contact);
         return "redirect:/contactus";
     }
+
+    @GetMapping("/politics")
+    public String politicsPage(){
+        return "politicsPage";
+    }
 }
