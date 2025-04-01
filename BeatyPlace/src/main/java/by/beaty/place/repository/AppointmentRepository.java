@@ -2,7 +2,9 @@ package by.beaty.place.repository;
 
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Users;
+import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,4 +43,25 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             + "a.master_id = :idMaster)",
             nativeQuery = true)
     boolean hasMasterAppointmentById(@Param("id") Long id, @Param("idMaster") Long idMaster);
+
+    //TODO Тест
+    @Query("SELECT COALESCE(SUM(a.category.price), 0.0) FROM Appointment a WHERE a.workSchedule.date = CURRENT_DATE")
+    Double getTotalEarningsForToday();
+
+    //TODO Тест
+    @Query("SELECT COUNT(a.client.id) FROM Appointment a WHERE a.workSchedule.date = CURRENT_DATE")
+    Long countClientsForToday();
+
+    //TODO Тест
+    @Query("SELECT COUNT(a.client.id) FROM Appointment a WHERE a.workSchedule.date >= :startDate")
+    Long countClientsForLastMonth(@Param("startDate") LocalDate startDate);
+
+    //TODO Тест
+    @Query("SELECT COALESCE(SUM(a.category.price), 0) FROM Appointment a WHERE a.workSchedule.date >= :startDate")
+    Long getTotalEarningsForLastMonth(@Param("startDate") LocalDate startDate);
+
+    //TODO Тест
+    @Query("SELECT a FROM Appointment a WHERE a.workSchedule.date >= :startOfMonth AND a.workSchedule.date <= :endOfMonth ORDER BY a.workSchedule.date DESC")
+    List<Appointment> getLast10AppointmentInCurrentMonth(@Param("startOfMonth") LocalDate startOfMonth,
+            @Param("endOfMonth") LocalDate endOfMonth, Pageable pageable);
 }

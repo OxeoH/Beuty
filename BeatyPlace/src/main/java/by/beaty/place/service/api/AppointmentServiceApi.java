@@ -4,7 +4,10 @@ import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.service.dto.AppointmentRequestDto;
 import by.beaty.place.service.dto.UserRequestDto;
+import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 public interface AppointmentServiceApi {
 
@@ -25,4 +28,6 @@ public interface AppointmentServiceApi {
     boolean hasMasterAppointmentById(Long id, Long idMaster);
 
     void createNoteAppointment(Long id, String note);
+
+    List<Appointment> getLast10AppointmentInCurrentMonth();
 }

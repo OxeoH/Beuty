@@ -1,10 +1,10 @@
-<#import "../common/base.ftlh" as base>
-<#include "../common/security.ftlh">
+<#import "common/base.ftlh" as base>
+<#include "common/security.ftlh">
 
 <@base.page>
   <div class="slide-one-item home-slider owl-carousel">
 
-    <div class="site-blocks-cover inner-page-cover" style="background-image: url(/static/images/hero_bg_2.jpg);" data-aos="fade"
+    <div class="site-blocks-cover inner-page-cover" style="background-image: url(/static/user/images/hero_bg_2.jpg);" data-aos="fade"
          data-stellar-background-ratio="0.5">
       <div class="container">
         <div class="row align-items-center justify-content-center text-center">
@@ -322,6 +322,6 @@
     });
   </script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="/static/js/infoLoader.js"></script>
+  <script src="/static/user/js/infoLoader.js"></script>
 
 </@base.page>

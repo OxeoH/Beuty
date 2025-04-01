@@ -1,5 +1,5 @@
-<#import "../common/base.ftlh" as base>
-<#include "../common/security.ftlh">
+<#import "common/base.ftlh" as base>
+<#include "common/security.ftlh">
 
 <@base.page>
     <#if notFound??>
@@ -89,7 +89,7 @@
     <div id='calendar' style="margin-bottom: 10px"></div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="/static/lib/calendar.js"></script>
+    <script src="/static/user/lib/calendar.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
@@ -152,7 +152,7 @@
         });
       });
     </script>
-    <script src="/static/js/infoLoader.js"></script>
+    <script src="/static/user/js/infoLoader.js"></script>
 
     <div class="modal fade" id="modaladdappointment" tabindex="-1" role="dialog" aria-labelledby="modaladdappointment"
          aria-hidden="true">
