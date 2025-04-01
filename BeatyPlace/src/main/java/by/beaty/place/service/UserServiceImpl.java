@@ -164,6 +164,16 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    public List<UserRequestDto> getAllMasters() {
+        List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(Role.MASTER)
+                .stream()
+                .map(this::getMasterFromUser)
+                .toList();
+        log.info("Получение всех мастеров по роли {}", LocalDateTime.now());
+        return userRequestDtoList;
+    }
+
+    @Override
     public List<UserRequestDto> getUsersByRole(Role role) {
         List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(role)
                 .stream()
@@ -217,6 +227,17 @@ public class UserServiceImpl implements UserServiceApi {
                 .appointmentsMaster(user.getMasterAppointments())
                 .role(user.getRole())
                 .email(user.getEmail())
+                .build();
+    }
+
+    private UserRequestDto getMasterFromUser(Users user) {
+        return UserRequestDto.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .appointmentsMaster(user.getMasterAppointments())
+                .role(user.getRole())
+                .email(user.getEmail())
+                .categoryList(user.getCategories())
                 .build();
     }
 

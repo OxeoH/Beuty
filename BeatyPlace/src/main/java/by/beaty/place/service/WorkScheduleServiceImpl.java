@@ -50,4 +50,37 @@ public class WorkScheduleServiceImpl implements WorkScheduleServiceApi {
         workScheduleRepository.save(workSchedule);
         log.info("Обновление статус слота для записи с идентификатором {} {}", slotId, LocalDateTime.now());
     }
+
+    @Override
+    public List<WorkScheduleDto> findByMasterAndDateBetween(Long idMaster) {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+
+        Users master = Users.builder()
+                .id(idMaster)
+                .build();
+        List<WorkScheduleDto> allSlotsMaster = workScheduleRepository.findByMasterAndDateBetween(master, startDate, endDate)
+                .stream()
+                .map(WorkScheduleMapper::fromEntity)
+                .toList();
+        log.info("Получение всех слотов от мастера с идентификатором в этом месяце {} {}", idMaster, LocalDateTime.now());
+        return allSlotsMaster;
+    }
+
+    @Override
+    public void createWorkSchedule(Long idMaster, WorkScheduleDto workScheduleDto) {
+        Users master = Users.builder()
+                .id(idMaster)
+                .build();
+        WorkSchedule workSchedule = WorkSchedule.builder()
+                .master(master)
+                .startTime(workScheduleDto.getStartTime())
+                .endTime(workScheduleDto.getEndTime())
+                .date(workScheduleDto.getDate())
+                .status(SlotStatus.FREE)
+                .build();
+        log.info("Сохранение нового слота у мастера {} {}", idMaster, LocalDateTime.now());
+        workScheduleRepository.save(workSchedule);
+    }
 }

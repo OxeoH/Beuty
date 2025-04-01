@@ -22,9 +22,9 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="../pages/tables.html">
+        <a class="nav-link text-dark" href="/admin/master/list">
           <i class="material-symbols-rounded opacity-5">table_view</i>
-          <span class="nav-link-text ms-1">График мастеров</span>
+          <span class="nav-link-text ms-1">Список мастеров</span>
         </a>
       </li>
       <li class="nav-item">

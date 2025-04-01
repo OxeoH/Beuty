@@ -6,10 +6,17 @@ import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.AppointmentStaticsServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
+import by.beaty.place.service.api.UserServiceApi;
+import by.beaty.place.service.api.WorkScheduleServiceApi;
+import by.beaty.place.service.dto.UserRequestDto;
+import by.beaty.place.service.dto.WorkScheduleDto;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +33,8 @@ public class AdminController {
     private final AppointmentStaticsServiceApi appointmentStaticsService;
     private final CategoryServiceApi categoryService;
     private final AppointmentServiceApi appointmentService;
+    private final UserServiceApi userService;
+    private final WorkScheduleServiceApi workScheduleService;
 
     @GetMapping("/")
     public String adminHome(Model model) {
@@ -54,5 +63,34 @@ public class AdminController {
     public String updateStatus(@RequestParam("id") Long idAppointment, @RequestParam("status") String status) {
         appointmentService.updateStatus(idAppointment, AppointmentStatus.valueOf(status));
         return "redirect:/admin/appointments";
+    }
+
+    @GetMapping("/master/list")
+    public String masterList(Model model) {
+        List<UserRequestDto> mastersList = userService.getAllMasters();
+        model.addAttribute("mastersList", mastersList);
+        return "admin/listMaster";
+    }
+
+    @GetMapping("/workschedule/master/{id}")
+    public String workScheduleMaster(@PathVariable("id") Long idMaster, Model model) {
+        List<WorkScheduleDto> workScheduleByMaster = workScheduleService.findByMasterAndDateBetween(idMaster);
+        model.addAttribute("workSchedules", workScheduleByMaster);
+        model.addAttribute("idMaster", idMaster);
+        return "admin/scheduleMaster";
+    }
+
+    @PostMapping("/workschedule/master/{id}/create")
+    public String createWorkScheduleMaster(@PathVariable("id") Long idMaster,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam("startTime") @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
+            @RequestParam("endTime") @DateTimeFormat(pattern = "HH:mm") LocalTime endTime) {
+        WorkScheduleDto workScheduleDto = WorkScheduleDto.builder()
+                .date(date)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
+        workScheduleService.createWorkSchedule(idMaster, workScheduleDto);
+        return "redirect:/admin/workschedule/master/" + idMaster;
     }
 }

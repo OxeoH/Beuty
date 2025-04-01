@@ -25,47 +25,55 @@
                 </tr>
                 </thead>
                 <tbody>
-                <#list appointmentList as appointment>
+                <#if appointmentList?size gt 0>
+                    <#list appointmentList as appointment>
+                      <tr>
+                        <td>
+                          <p class="text-xs font-weight-bold mb-0">${appointment.category.name}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <#if appointment.status == "PENDING">
+                              <span class="badge badge-sm bg-gradient-secondary">${appointment.status.getName()}</span>
+                            </#if>
+                            <#if appointment.status == "CONFIRMED">
+                              <span class="badge badge-sm bg-gradient-success">${appointment.status.getName()}</span>
+                            </#if>
+                            <#if appointment.status == "CANCELED">
+                              <span class="badge badge-sm bg-gradient-danger">${appointment.status.getName()}</span>
+                            </#if>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">${appointment.master.fullName}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">${appointment.client.fullName}</span>
+                        </td>
+                        <td>
+                          <p class="text-xs font-weight-bold mb-0">${appointment.workSchedule.date}</p>
+                          <p class="text-xs text-secondary mb-0">Начало ${appointment.workSchedule.startTime} |
+                            Конец ${appointment.workSchedule.endTime}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">${appointment.clientNote}</span>
+                        </td>
+                        <td class="align-middle">
+                          <a href="#" class="btn btn-sm btn-outline-secondary"
+                             data-bs-toggle="modal"
+                             data-bs-target="#statusModal"
+                             data-id="${appointment.id}"
+                             data-current-status="${appointment.status}">
+                            Изменить статус
+                          </a>
+                        </td>
+                      </tr>
+                    </#list>
+                <#else>
                   <tr>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0">${appointment.category.name}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                        <#if appointment.status == "PENDING">
-                          <span class="badge badge-sm bg-gradient-secondary">${appointment.status.getName()}</span>
-                        </#if>
-                        <#if appointment.status == "CONFIRMED">
-                          <span class="badge badge-sm bg-gradient-success">${appointment.status.getName()}</span>
-                        </#if>
-                        <#if appointment.status == "CANCELED">
-                          <span class="badge badge-sm bg-gradient-danger">${appointment.status.getName()}</span>
-                        </#if>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">${appointment.master.fullName}</span>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">${appointment.client.fullName}</span>
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${appointment.workSchedule.date}</p>
-                      <p class="text-xs text-secondary mb-0">Начало ${appointment.workSchedule.startTime} |
-                        Конец ${appointment.workSchedule.endTime}</p>
-                    </td>
-                    <td class="align-middle text-center">
-                      <span class="text-secondary text-xs font-weight-bold">${appointment.clientNote}</span>
-                    </td>
-                    <td class="align-middle">
-                      <a href="#" class="btn btn-sm btn-outline-secondary"
-                         data-bs-toggle="modal"
-                         data-bs-target="#statusModal"
-                         data-id="${appointment.id}"
-                         data-current-status="${appointment.status}">
-                        Изменить статус
-                      </a>
+                      <p class="text-xs font-weight-bold mb-0">Записей на текущий момент нет.</p>
                     </td>
                   </tr>
-                </#list>
+                </#if>
                 </tbody>
               </table>
             </div>
@@ -105,7 +113,7 @@
     </div>
   </div>
   <script>
-    document.getElementById('statusModal').addEventListener('show.bs.modal', function(event) {
+    document.getElementById('statusModal').addEventListener('show.bs.modal', function (event) {
       var button = event.relatedTarget;
       var recordId = button.getAttribute('data-id');
       var currentStatus = button.getAttribute('data-current-status');
