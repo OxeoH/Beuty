@@ -10,15 +10,21 @@
   <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link active bg-gradient-dark text-white" href="../pages/dashboard.html">
+        <a class="nav-link active bg-gradient-dark text-white" href="/admin/">
           <i class="material-symbols-rounded opacity-5">dashboard</i>
           <span class="nav-link-text ms-1">Главная</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="../pages/tables.html">
+        <a class="nav-link text-dark" href="/admin/appointments">
           <i class="material-symbols-rounded opacity-5">table_view</i>
           <span class="nav-link-text ms-1">Список записей</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="../pages/tables.html">
+          <i class="material-symbols-rounded opacity-5">table_view</i>
+          <span class="nav-link-text ms-1">График мастеров</span>
         </a>
       </li>
       <li class="nav-item">

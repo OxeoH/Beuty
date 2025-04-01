@@ -178,6 +178,19 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
         return appointments;
     }
 
+    @Override
+    public List<Appointment> getAll() {
+        log.info("Получения всех записей {}", LocalDateTime.now());
+        return appointmentRepository.findAll();
+    }
+
+    @Override
+    @Transactional(value = "transactionManager")
+    public void updateStatus(Long id, AppointmentStatus status) {
+        log.info("Изменение статуса для записи {} на статус {} {}", id, status, LocalDateTime.now());
+        appointmentRepository.updateStatus(id, status);
+    }
+
     private void validateAppointmentRequest(AppointmentRequestDto appointmentRequestDto) {
         if (appointmentRequestDto.getClientId() == null ||
                 appointmentRequestDto.getMasterId() == null ||

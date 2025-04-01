@@ -2,10 +2,12 @@ package by.beaty.place.repository;
 
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Users;
+import by.beaty.place.model.common.AppointmentStatus;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -64,4 +66,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT a FROM Appointment a WHERE a.workSchedule.date >= :startOfMonth AND a.workSchedule.date <= :endOfMonth ORDER BY a.workSchedule.date DESC")
     List<Appointment> getLast10AppointmentInCurrentMonth(@Param("startOfMonth") LocalDate startOfMonth,
             @Param("endOfMonth") LocalDate endOfMonth, Pageable pageable);
+
+    //TODO Тест
+    @Modifying
+    @Query("UPDATE Appointment a SET a.status = :status WHERE a.id = :id")
+    void updateStatus(@Param("id") Long id, @Param("status") AppointmentStatus status);
 }

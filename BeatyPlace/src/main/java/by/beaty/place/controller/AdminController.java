@@ -1,6 +1,8 @@
 package by.beaty.place.controller;
 
+import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
+import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.AppointmentStaticsServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
@@ -11,7 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin/")
@@ -36,5 +41,18 @@ public class AdminController {
         model.addAttribute("lastAppointment", appointmentService.getLast10AppointmentInCurrentMonth());
 
         return "admin/home";
+    }
+
+    @GetMapping("/appointments")
+    public String appointmentList(Model model) {
+        List<Appointment> appointmentList = appointmentService.getAll();
+        model.addAttribute("appointmentList", appointmentList);
+        return "admin/listAppointment";
+    }
+
+    @PostMapping("/update/status")
+    public String updateStatus(@RequestParam("id") Long idAppointment, @RequestParam("status") String status) {
+        appointmentService.updateStatus(idAppointment, AppointmentStatus.valueOf(status));
+        return "redirect:/admin/appointments";
     }
 }
