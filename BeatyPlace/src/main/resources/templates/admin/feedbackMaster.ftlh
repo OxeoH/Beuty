@@ -30,8 +30,6 @@
                           <p class="text-xs font-weight-bold mb-0">${review.client.fullName}</p>
                         </td>
                         <td class="align-middle text-center">
-                        </td>
-                        <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold">${review.comment}</span>
                         </td>
                         <td class="align-middle text-center">

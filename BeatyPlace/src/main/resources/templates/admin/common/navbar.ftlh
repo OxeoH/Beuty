@@ -42,7 +42,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="../pages/tables.html">
+        <a class="nav-link text-dark" href="/admin/contacts">
           <i class="material-symbols-rounded opacity-5">table_view</i>
           <span class="nav-link-text ms-1">Список обратной связи</span>
         </a>
@@ -52,7 +52,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link text-dark" href="#" onclick="downloadAndRedirect(event)">
-          <i class="material-symbols-rounded opacity-5">login</i>
+          <i class="material-symbols-rounded opacity-5">download</i>
           <span class="nav-link-text ms-1">Выгрузить отчет</span>
         </a>
       </li>

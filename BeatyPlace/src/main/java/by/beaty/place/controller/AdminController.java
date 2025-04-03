@@ -2,12 +2,14 @@ package by.beaty.place.controller;
 
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
+import by.beaty.place.model.Contact;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.model.common.Role;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.AppointmentStaticsServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
+import by.beaty.place.service.api.ContactServiceApi;
 import by.beaty.place.service.api.ExcelExporterApi;
 import by.beaty.place.service.api.SalonReviewsServiceApi;
 import by.beaty.place.service.api.UserServiceApi;
@@ -49,6 +51,7 @@ public class AdminController {
     private final WorkScheduleServiceApi workScheduleService;
     private final SalonReviewsServiceApi salonReviewsService;
     private final ExcelExporterApi excelExporter;
+    private final ContactServiceApi contactService;
 
     @GetMapping("/")
     public String adminHome(Model model) {
@@ -186,5 +189,12 @@ public class AdminController {
                 .headers(headers)
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(new InputStreamResource(reportStream));
+    }
+
+    @GetMapping("/contacts")
+    public String contacts(Model model) {
+        List<Contact> contactList = contactService.getAll();
+        model.addAttribute("contactList", contactList);
+        return "admin/contacts";
     }
 }
