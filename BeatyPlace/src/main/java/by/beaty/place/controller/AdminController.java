@@ -2,6 +2,7 @@ package by.beaty.place.controller;
 
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
+import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.model.common.Role;
 import by.beaty.place.service.api.AppointmentServiceApi;
@@ -76,6 +77,13 @@ public class AdminController {
         model.addAttribute("categoryList", categoryList);
 
         return "admin/listMaster";
+    }
+
+    @GetMapping("/master/feedback/{id}")
+    public String feedbackMaster(@PathVariable("id") Long idMaster, Model model) {
+        Users masterById = userService.getUserById(idMaster);
+        model.addAttribute("master", masterById);
+        return "admin/feedbackMaster";
     }
 
     @PostMapping("/master/add/category")

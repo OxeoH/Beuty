@@ -10,7 +10,7 @@
   <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link active bg-gradient-dark text-white" href="/admin/">
+        <a class="nav-link bg-gradient-dark text-white" href="/admin/">
           <i class="material-symbols-rounded opacity-5">dashboard</i>
           <span class="nav-link-text ms-1">Главная</span>
         </a>

@@ -47,6 +47,11 @@
                             График мастера
                           </a>
                         </td>
+                        <td class="align-middle">
+                          <a href="/admin/master/feedback/${master.id}" class="btn btn-sm btn-outline-secondary">
+                           Отзывы
+                          </a>
+                        </td>
                           <#if master.categoryList?? && master.categoryList?size lt 1>
                             <td class="align-middle">
                               <a class="btn btn-sm btn-outline-secondary"
