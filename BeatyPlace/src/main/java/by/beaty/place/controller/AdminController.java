@@ -8,8 +8,10 @@ import by.beaty.place.model.common.Role;
 import by.beaty.place.service.api.AppointmentServiceApi;
 import by.beaty.place.service.api.AppointmentStaticsServiceApi;
 import by.beaty.place.service.api.CategoryServiceApi;
+import by.beaty.place.service.api.SalonReviewsServiceApi;
 import by.beaty.place.service.api.UserServiceApi;
 import by.beaty.place.service.api.WorkScheduleServiceApi;
+import by.beaty.place.service.dto.SalonReviewDto;
 import by.beaty.place.service.dto.UserRequestDto;
 import by.beaty.place.service.dto.WorkScheduleDto;
 import java.time.LocalDate;
@@ -39,6 +41,7 @@ public class AdminController {
     private final AppointmentServiceApi appointmentService;
     private final UserServiceApi userService;
     private final WorkScheduleServiceApi workScheduleService;
+    private final SalonReviewsServiceApi salonReviewsService;
 
     @GetMapping("/")
     public String adminHome(Model model) {
@@ -156,5 +159,12 @@ public class AdminController {
                 .build();
         userService.updateUser(idUser, requestDto);
         return "redirect:/admin/users/list";
+    }
+
+    @GetMapping("/salon-reviews")
+    public String salonReviews(Model model) {
+        List<SalonReviewDto> allReview = salonReviewsService.getAllReview();
+        model.addAttribute("salonReviewList", allReview);
+        return "admin/feedbackSalon";
     }
 }
