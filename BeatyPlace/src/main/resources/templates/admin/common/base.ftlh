@@ -143,6 +143,23 @@
 
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="/static/admin/js/material-dashboard.min.js?v=3.2.0"></script>
+  <script>
+    function downloadAndRedirect(event) {
+      event.preventDefault();
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = '/admin/export/excel';
+      document.body.appendChild(iframe);
+
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 1000);
+
+      setTimeout(() => {
+        window.location.href = '/admin/';
+      }, 500);
+    }
+  </script>
   </body>
   </html>
 </#macro>
