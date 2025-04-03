@@ -71,4 +71,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Modifying
     @Query("UPDATE Appointment a SET a.status = :status WHERE a.id = :id")
     void updateStatus(@Param("id") Long id, @Param("status") AppointmentStatus status);
+
+    @Query("SELECT a FROM Appointment a LEFT JOIN FETCH a.category LEFT JOIN FETCH a.workSchedule LEFT JOIN FETCH a.client")
+    List<Appointment> findAll();
+
+    @Query("SELECT a FROM Appointment a WHERE a.client.id = :userId")
+    List<Appointment> findAllByUserId(@Param("userId") Long userId);
 }

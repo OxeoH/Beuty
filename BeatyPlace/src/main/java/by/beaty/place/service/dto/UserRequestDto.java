@@ -23,7 +23,10 @@ public class UserRequestDto {
     private String password;
     private String fullName;
     private Role role;
+    private boolean blocked;
+    private boolean emailVerified;
     private List<Appointment> appointmentsUser;
     private List<Appointment> appointmentsMaster;
-    private List<Category>categoryList;
+    private List<Category> categoryList;
+    private List<String> reasonsBlock;
 }

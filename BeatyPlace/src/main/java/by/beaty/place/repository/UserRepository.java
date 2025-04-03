@@ -5,6 +5,7 @@ import by.beaty.place.model.common.Role;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     List<Users> getAllByRole(Role role);
 
     Optional<Users> findByUsernameOrEmail(String username, String email);
+
+    @Query("SELECT DISTINCT u FROM Users u LEFT JOIN FETCH u.blackListEntries")
+    List<Users> findAll();
 }

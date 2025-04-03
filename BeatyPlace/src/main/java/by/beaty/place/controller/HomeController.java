@@ -28,7 +28,7 @@ public class HomeController {
 
     @GetMapping("/about")
     public String aboutUsPage() {
-        return "aboutUsPage";
+        return "user/aboutUsPage";
     }
 
     @GetMapping("/services")
@@ -61,7 +61,7 @@ public class HomeController {
     }
 
     @GetMapping("/politics")
-    public String politicsPage(){
+    public String politicsPage() {
         return "user/politicsPage";
     }
 }

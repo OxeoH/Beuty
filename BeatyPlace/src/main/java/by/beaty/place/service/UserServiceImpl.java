@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
@@ -107,10 +108,10 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    @Transactional("transactionManager")
     public Users updateUser(Long id, UserRequestDto userRequestDto) {
         Users userById = getUserById(id);
-        userById.setFullName(userRequestDto.getFullName());
-
+        userById.setRole(userRequestDto.getRole());
         log.info("Обновление пользователя с идентификаторов {} {}", id, LocalDateTime.now());
         return userById;
     }
@@ -130,6 +131,7 @@ public class UserServiceImpl implements UserServiceApi {
     public void blockUser(Long userId, Long blockedById, LocalDateTime blockedUntil, String reason) {
         Users userById = getUserById(userId);
         BlackList blackList = BlackList.builder()
+                .blockedAt(LocalDateTime.now())
                 .blockedUntil(blockedUntil)
                 .reason(reason)
                 .user(userById)
@@ -196,6 +198,14 @@ public class UserServiceImpl implements UserServiceApi {
         sendResetCodeByEmail(email, resetCode);
     }
 
+    @Override
+    @Transactional("transactionManager")
+    public void updateCategoryUser(UserRequestDto requestDto) {
+        Users userById = getUserById(requestDto.getId());
+        userById.setCategories(requestDto.getCategoryList());
+        log.info("Установка мастеру категории {}", LocalDateTime.now());
+    }
+
     private void validateUserForPasswordReset(Users user) {
         if (Boolean.FALSE.equals(user.getEmailVerified())) {
             throw new DisabledException("Почта не верифицирована!");
@@ -221,12 +231,19 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private UserRequestDto getFromUser(Users user) {
+        List<String> reasonBlock = user.getBlackListEntries().stream()
+                .map(blackList -> blackList.getReason())
+                .collect(Collectors.toList());
         return UserRequestDto.builder()
+                .id(user.getId())
                 .fullName(user.getFullName())
                 .appointmentsUser(user.getClientAppointments())
                 .appointmentsMaster(user.getMasterAppointments())
                 .role(user.getRole())
                 .email(user.getEmail())
+                .blocked(user.getLocked())
+                .reasonsBlock(reasonBlock)
+                .emailVerified(user.getEmailVerified())
                 .build();
     }
 

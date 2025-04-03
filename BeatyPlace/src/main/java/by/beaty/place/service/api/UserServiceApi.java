@@ -30,4 +30,7 @@ public interface UserServiceApi {
     List<UserRequestDto> getUsersByRole(Role role);
 
     void sendResetCode(String email);
+
+    //TODO Тест
+    void updateCategoryUser(UserRequestDto requestDto);
 }

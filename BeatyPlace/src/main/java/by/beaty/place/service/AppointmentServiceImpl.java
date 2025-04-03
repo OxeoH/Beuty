@@ -185,6 +185,13 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
     }
 
     @Override
+    public List<Appointment> getAllByUserId(Long userId) {
+        List<Appointment> allByUserId = appointmentRepository.findAllByUserId(userId);
+        log.info("Получение всех записей пользователя по идентификатору {} {}", userId, LocalDateTime.now());
+        return allByUserId;
+    }
+
+    @Override
     @Transactional(value = "transactionManager")
     public void updateStatus(Long id, AppointmentStatus status) {
         log.info("Изменение статуса для записи {} на статус {} {}", id, status, LocalDateTime.now());
