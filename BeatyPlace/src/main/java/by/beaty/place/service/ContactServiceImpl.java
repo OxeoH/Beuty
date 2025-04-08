@@ -29,7 +29,7 @@ public class ContactServiceImpl implements ContactServiceApi {
         NotificationDto notification = NotificationDto.builder()
                 .notificationType(NotificationType.CONTACT)
                 .message(NotificationMessage.CONTACT_FORM.getMessage())
-                .toUserId(23L)
+                .toUserId(999999L)
                 .build();
         kafkaSender.sendNotification(notification);
         log.info("Отправка уведомления {}", LocalDateTime.now());

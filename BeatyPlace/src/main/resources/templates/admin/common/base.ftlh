@@ -38,95 +38,20 @@
             </div>
           </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-
-
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                </div>
-              </a>
-            </li>
-
-            <li class="nav-item dropdown pe-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown"
+            <li class="nav-item dropdown">
+              <a href="#"  class="nav-link text-body p-0" id="notificationBell" data-bs-toggle="dropdown"
                  aria-expanded="false">
                 <i class="material-symbols-rounded">notifications</i>
+                <span id="notificationCount"
+                      class="position-absolute"
+                      style="width: 7px; height: 7px; background-color: red; border-radius: 50%;
+                 display: none; top: -5px; right: 10px;">
+                </span>
               </a>
-              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="/static/admin/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New message</span> from Laur
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          13 minutes ago
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="/static/admin/img/small-logos/logo-spotify.svg"
-                             class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New album</span> by Travis Scott
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          1 day
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>credit-card</title>
-                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                              <g transform="translate(1716.000000, 291.000000)">
-                                <g transform="translate(453.000000, 454.000000)">
-                                  <path class="color-background"
-                                        d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z"
-                                        opacity="0.593633743"></path>
-                                  <path class="color-background"
-                                        d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </svg>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          Payment successfully completed
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          2 days
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
+              <ul id="notificationList" class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
+                  aria-labelledby="dropdownMenuButton"
+                  style="display: none; position: absolute; right: 0; max-height: 200px; overflow-y: auto; width: 200px;">
+                <li><p class="text-muted">Нет новых уведомлений</p></li>
               </ul>
             </li>
           </ul>
@@ -135,6 +60,9 @@
     </nav>
       <#nested/>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+  <script></script>
   <script src="/static/admin/js/core/popper.min.js"></script>
   <script src="/static/admin/js/core/bootstrap.min.js"></script>
   <script src="/static/admin/js/plugins/perfect-scrollbar.min.js"></script>
@@ -160,6 +88,146 @@
       }, 500);
     }
   </script>
+
+  <script src="/static/user/js/sockjs.min.js"></script>
+  <script src="/static/user/js/stomp.min.js"></script>
+  <#if user?? && (isMaster || isAdmin)>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const socket = new SockJS('/ws');
+        const stompClient = Stomp.over(socket);
+
+        const notificationBell = document.getElementById('notificationBell');
+        const notificationCountElement = document.getElementById('notificationCount');
+        const notificationList = document.getElementById('notificationList');
+
+        const currentUserId = document.getElementById('notificationCount').getAttribute('data-user-id');
+
+        function updateNotificationCount(count) {
+          if (count > 0) {
+            notificationCountElement.style.display = 'block';
+          } else {
+            notificationCountElement.style.display = 'none';
+          }
+        }
+
+        function loadNotifications() {
+          const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
+          const userNotifications = notifications[currentUserId] || [];
+          updateNotificationCount(userNotifications.length);
+          renderNotifications(userNotifications);
+        }
+
+        function renderNotifications(notifications) {
+          notificationList.innerHTML = '';
+
+          if (notifications.length === 0) {
+            notificationList.innerHTML = '<li><p style="font-size: 10px; font-weight: bold" class="text-muted">Нет новых уведомлений</p></li>';
+          } else {
+            notifications.forEach((notification, index) => {
+              const li = document.createElement('li');
+              li.innerHTML = "<p style='font-size: 10px; font-weight: bold' class='dropdown-item'>" + notification.message
+                  + "</p>";
+
+              li.addEventListener("click", function () {
+                notifications.splice(index, 1);
+                saveNotifications(notifications);
+                updateNotificationCount(notifications.length);
+                renderNotifications(notifications);
+              });
+
+              notificationList.appendChild(li);
+            });
+          }
+        }
+
+        function saveNotifications(notifications) {
+          const allNotifications = JSON.parse(localStorage.getItem('notifications')) || {};
+          allNotifications[currentUserId] = notifications;
+          localStorage.setItem('notifications', JSON.stringify(allNotifications));
+        }
+
+        function markAsRead(notificationId) {
+          fetch(`http://localhost:8080/api/notifications/read/` + notificationId, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              console.log(`Notification marked as read`);
+            } else {
+              console.error(`Failed to mark notification as read`);
+            }
+          })
+          .catch(error => {
+            console.error('Error marking notification as read:', error);
+          });
+        }
+
+        function fetchUnreadNotifications() {
+          const currentUserId = "${currentUserId?replace(' ', '')?replace(' ', '')}";
+
+          fetch(`http://localhost:8080/api/notifications/unread/` + currentUserId)
+          .then(response => response.json())
+          .then(unreadNotifications => {
+            if (unreadNotifications && unreadNotifications.length > 0) {
+              const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
+              if (!notifications[currentUserId]) {
+                notifications[currentUserId] = [];
+              }
+
+              unreadNotifications.forEach(notification => {
+                notifications[currentUserId].push({...notification, isRead: false});
+              });
+
+              localStorage.setItem('notifications', JSON.stringify(notifications));
+              updateNotificationCount(notifications[currentUserId].filter(n => !n.isRead).length);
+              renderNotifications(notifications[currentUserId]);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching unread notifications:', error);
+          });
+        }
+
+        stompClient.connect({}, function () {
+          const currentUserId = "${currentUserId?replace(' ', '')?replace(' ', '')}";
+
+          stompClient.subscribe('/user/' + currentUserId + '/topic/notifications', function (messageOutput) {
+            const notification = messageOutput.body;
+
+            let parsedNotification;
+            try {
+              parsedNotification = JSON.parse(notification);
+            } catch (e) {
+              parsedNotification = notification;
+            }
+
+            const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
+            if (!notifications[currentUserId]) {
+              notifications[currentUserId] = [];
+            }
+
+            notifications[currentUserId].push(parsedNotification);
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            markAsRead(parsedNotification.id);
+            updateNotificationCount(notifications[currentUserId].length);
+            renderNotifications(notifications[currentUserId]);
+          });
+          fetchUnreadNotifications();
+        });
+
+        notificationBell.addEventListener('click', function (event) {
+          event.preventDefault();
+          notificationList.style.display = notificationList.style.display === 'none' ? 'block' : 'none';
+        });
+
+        loadNotifications();
+      });
+    </script>
+  </#if>
   </body>
   </html>
 </#macro>
