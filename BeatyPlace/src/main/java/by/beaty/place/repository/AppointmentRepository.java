@@ -45,34 +45,27 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             nativeQuery = true)
     boolean hasClientAppointmentById(@Param("id") Long id, @Param("idClient") Long idClient);
 
-    //TODO Тест
     @Query(value = "SELECT EXISTS (SELECT 1 FROM appointments a WHERE a.id = :id AND "
             + "a.master_id = :idMaster)",
             nativeQuery = true)
     boolean hasMasterAppointmentById(@Param("id") Long id, @Param("idMaster") Long idMaster);
 
-    //TODO Тест
     @Query("SELECT COALESCE(SUM(a.category.price), 0.0) FROM Appointment a WHERE a.workSchedule.date = CURRENT_DATE")
     Double getTotalEarningsForToday();
 
-    //TODO Тест
     @Query("SELECT COUNT(a.client.id) FROM Appointment a WHERE a.workSchedule.date = CURRENT_DATE")
     Long countClientsForToday();
 
-    //TODO Тест
     @Query("SELECT COUNT(a.client.id) FROM Appointment a WHERE a.workSchedule.date >= :startDate")
     Long countClientsForLastMonth(@Param("startDate") LocalDate startDate);
 
-    //TODO Тест
     @Query("SELECT COALESCE(SUM(a.category.price), 0) FROM Appointment a WHERE a.workSchedule.date >= :startDate")
     Long getTotalEarningsForLastMonth(@Param("startDate") LocalDate startDate);
 
-    //TODO Тест
     @Query("SELECT a FROM Appointment a WHERE a.workSchedule.date >= :startOfMonth AND a.workSchedule.date <= :endOfMonth ORDER BY a.workSchedule.date DESC")
     List<Appointment> getLast10AppointmentInCurrentMonth(@Param("startOfMonth") LocalDate startOfMonth,
             @Param("endOfMonth") LocalDate endOfMonth, Pageable pageable);
 
-    //TODO Тест
     @Modifying
     @Query("UPDATE Appointment a SET a.status = :status WHERE a.id = :id")
     void updateStatus(@Param("id") Long id, @Param("status") AppointmentStatus status);
