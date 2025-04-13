@@ -17,11 +17,14 @@ import by.beaty.place.service.dto.NotificationDto;
 import by.beaty.place.service.dto.NotificationMessage;
 import by.beaty.place.service.dto.UserRequestDto;
 import by.beaty.place.service.exception.AppointmentNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -161,6 +164,38 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
                 .build();
         kafkaSender.sendNotification(notification);
         log.info("Уведомление отправлено мастеру с ID {}", masterId);
+    }
+
+    @Override
+    public List<Appointment> getLast10AppointmentInCurrentMonth() {
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+        Pageable pageable = PageRequest.of(0, 10);
+        List<Appointment> appointments = appointmentRepository.getLast10AppointmentInCurrentMonth(startOfMonth, endOfMonth,
+                pageable);
+        log.info("Получение последний 10 записей в этом месяце {}", LocalDateTime.now());
+        return appointments;
+    }
+
+    @Override
+    public List<Appointment> getAll() {
+        log.info("Получения всех записей {}", LocalDateTime.now());
+        return appointmentRepository.findAll();
+    }
+
+    @Override
+    public List<Appointment> getAllByUserId(Long userId) {
+        List<Appointment> allByUserId = appointmentRepository.findAllByUserId(userId);
+        log.info("Получение всех записей пользователя по идентификатору {} {}", userId, LocalDateTime.now());
+        return allByUserId;
+    }
+
+    @Override
+    @Transactional(value = "transactionManager")
+    public void updateStatus(Long id, AppointmentStatus status) {
+        log.info("Изменение статуса для записи {} на статус {} {}", id, status, LocalDateTime.now());
+        appointmentRepository.updateStatus(id, status);
     }
 
     private void validateAppointmentRequest(AppointmentRequestDto appointmentRequestDto) {

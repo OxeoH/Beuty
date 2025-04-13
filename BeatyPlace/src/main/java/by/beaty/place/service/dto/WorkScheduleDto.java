@@ -1,5 +1,6 @@
 package by.beaty.place.service.dto;
 
+import by.beaty.place.model.common.SlotStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class WorkScheduleDto {
+
     private Long id;
 
     private LocalDate date;
@@ -21,4 +23,8 @@ public class WorkScheduleDto {
     private LocalTime startTime;
 
     private LocalTime endTime;
+
+    private SlotStatus status;
+
+    private String masterFullName;
 }

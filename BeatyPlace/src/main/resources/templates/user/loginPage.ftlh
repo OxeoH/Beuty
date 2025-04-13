@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/fonts/icomoon/style.css">
-  <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
-  <link rel="stylesheet" href="/static/css/vendor/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/css/loginStyle.css">
-  <link rel="icon" href="/static/images/logo.png">
+  <link rel="stylesheet" href="/static/user/fonts/icomoon/style.css">
+  <link rel="stylesheet" href="/static/user/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/user/css/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/user/css/loginStyle.css">
+  <link rel="icon" href="/static/user/images/logo.png">
 
   <title>Авторизация</title>
 </head>
@@ -33,7 +33,7 @@
 </#if>
 
 <div class="d-lg-flex half">
-  <div class="bg order-1 order-md-2" style="background-image: url('/static/images/bg_1_login.jpg');"></div>
+  <div class="bg order-1 order-md-2" style="background-image: url('/static/user/images/bg_1_login.jpg');"></div>
   <div class="contents order-2 order-md-1">
 
     <div class="container">
@@ -75,9 +75,9 @@
   </div>
 </div>
 
-<script src="/static/js/jquery-3.3.1.min.js"></script>
-<script src="/static/js/popper.min.js"></script>
-<script src="/static/js/bootstrap.min.js"></script>
-<script src="/static/js/main.js"></script>
+<script src="/static/user/js/jquery-3.3.1.min.js"></script>
+<script src="/static/user/js/popper.min.js"></script>
+<script src="/static/user/js/bootstrap.min.js"></script>
+<script src="/static/user/js/main.js"></script>
 </body>
 </html>

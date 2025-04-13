@@ -1,0 +1,62 @@
+<#import "common/base.ftlh" as base>
+
+<@base.page>
+  <div class="container-fluid py-2">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">Обратная связь</h6>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                <tr>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Имя</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Фамилия</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Сообщение</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Дата обращения</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <#if contactList?size gt 0>
+                    <#list contactList as contact>
+                      <tr>
+                        <td class="align-middle text-center">
+                          <p class="text-xs font-weight-bold mb-0">${contact.firstname}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs font-weight-bold mb-0">${contact.lastname}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs font-weight-bold mb-0">${contact.email}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs font-weight-bold mb-0">${contact.message}</p>
+                        </td>
+                        <td class="align-middle text-center">
+                          <p class="text-xs font-weight-bold mb-0">${contact.dateTimeSend}</p>
+                        </td>
+                      </tr>
+                    </#list>
+                <#else>
+                  <tr>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">Обращений пока нет</p>
+                    </td>
+                  </tr>
+                </#if>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</@base.page>

@@ -12,4 +12,9 @@ public interface WorkScheduleServiceApi {
     List<WorkScheduleDto> findAvailableSlots(Long masterId, LocalDate date);
 
     void updateStatusWorkSchedule(Long slotId, SlotStatus status);
+
+    List<WorkScheduleDto> findByMasterAndDateBetween(Long idMaster);
+
+    //TODO Test
+    void createWorkSchedule(Long idMaster, WorkScheduleDto workScheduleDto);
 }

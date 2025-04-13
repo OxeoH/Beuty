@@ -1,6 +1,7 @@
 package by.beaty.place.service.dto;
 
 import by.beaty.place.model.Appointment;
+import by.beaty.place.model.Category;
 import by.beaty.place.model.common.Role;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,10 @@ public class UserRequestDto {
     private String password;
     private String fullName;
     private Role role;
+    private boolean blocked;
+    private boolean emailVerified;
     private List<Appointment> appointmentsUser;
     private List<Appointment> appointmentsMaster;
+    private List<Category> categoryList;
+    private List<String> reasonsBlock;
 }

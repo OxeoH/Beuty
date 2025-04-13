@@ -43,7 +43,7 @@ public class SalonReviewsServiceImpl implements SalonReviewsServiceApi {
         NotificationDto notification = NotificationDto.builder()
                 .notificationType(NotificationType.CONTACT)
                 .message(NotificationMessage.FEEDBACK.getMessage())
-                .toUserId(23L)
+                .toUserId(999999L)
                 .build();
         kafkaSender.sendNotification(notification);
         log.info("Уведомление отправлено {}", LocalDateTime.now());

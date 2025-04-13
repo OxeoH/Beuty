@@ -10,8 +10,11 @@ public class WorkScheduleMapper {
     public static WorkScheduleDto fromEntity(WorkSchedule workSchedule) {
         return WorkScheduleDto.builder()
                 .id(workSchedule.getId())
+                .date(workSchedule.getDate())
                 .startTime(workSchedule.getStartTime())
                 .endTime(workSchedule.getEndTime())
+                .status(workSchedule.getStatus())
+                .masterFullName(workSchedule.getMaster().getFullName())
                 .build();
     }
 }

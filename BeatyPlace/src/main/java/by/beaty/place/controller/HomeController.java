@@ -23,24 +23,24 @@ public class HomeController {
     public String home(Model model) {
         List<Category> categoryList = categoryServiceApi.getAll();
         model.addAttribute("categoryList", categoryList);
-        return "homePage";
+        return "user/homePage";
     }
 
     @GetMapping("/about")
     public String aboutUsPage() {
-        return "aboutUsPage";
+        return "user/aboutUsPage";
     }
 
     @GetMapping("/services")
     public String servicesPage(Model model) {
         List<Category> categoryList = categoryServiceApi.getAll();
         model.addAttribute("categoryList", categoryList);
-        return "servicePage";
+        return "user/servicePage";
     }
 
     @GetMapping("/contactus")
     public String contactUsPage() {
-        return "contactUsPage";
+        return "user/contactUsPage";
     }
 
     @PostMapping("/contactus")
@@ -61,7 +61,7 @@ public class HomeController {
     }
 
     @GetMapping("/politics")
-    public String politicsPage(){
-        return "politicsPage";
+    public String politicsPage() {
+        return "user/politicsPage";
     }
 }

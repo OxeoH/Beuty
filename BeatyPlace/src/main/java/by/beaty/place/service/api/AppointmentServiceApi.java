@@ -2,6 +2,7 @@ package by.beaty.place.service.api;
 
 import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
+import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.service.dto.AppointmentRequestDto;
 import by.beaty.place.service.dto.UserRequestDto;
 import java.util.List;
@@ -22,7 +23,19 @@ public interface AppointmentServiceApi {
     Appointment getById(Long id);
 
     boolean hasAppointmentByClientId(Long id, Long idClient);
+
     boolean hasMasterAppointmentById(Long id, Long idMaster);
 
     void createNoteAppointment(Long id, String note);
+
+    List<Appointment> getLast10AppointmentInCurrentMonth();
+
+    //TODO Тест
+    List<Appointment> getAll();
+
+    //TODO Тест
+    List<Appointment> getAllByUserId(Long userId);
+
+    //TODO Тест
+    void updateStatus(Long id, AppointmentStatus status);
 }

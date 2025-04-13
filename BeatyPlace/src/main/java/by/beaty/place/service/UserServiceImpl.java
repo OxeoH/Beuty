@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
@@ -107,10 +108,10 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    @Transactional("transactionManager")
     public Users updateUser(Long id, UserRequestDto userRequestDto) {
         Users userById = getUserById(id);
-        userById.setFullName(userRequestDto.getFullName());
-
+        userById.setRole(userRequestDto.getRole());
         log.info("Обновление пользователя с идентификаторов {} {}", id, LocalDateTime.now());
         return userById;
     }
@@ -130,6 +131,7 @@ public class UserServiceImpl implements UserServiceApi {
     public void blockUser(Long userId, Long blockedById, LocalDateTime blockedUntil, String reason) {
         Users userById = getUserById(userId);
         BlackList blackList = BlackList.builder()
+                .blockedAt(LocalDateTime.now())
                 .blockedUntil(blockedUntil)
                 .reason(reason)
                 .user(userById)
@@ -164,6 +166,16 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    public List<UserRequestDto> getAllMasters() {
+        List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(Role.MASTER)
+                .stream()
+                .map(this::getMasterFromUser)
+                .toList();
+        log.info("Получение всех мастеров по роли {}", LocalDateTime.now());
+        return userRequestDtoList;
+    }
+
+    @Override
     public List<UserRequestDto> getUsersByRole(Role role) {
         List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(role)
                 .stream()
@@ -184,6 +196,14 @@ public class UserServiceImpl implements UserServiceApi {
         updateUserResetCode(user, resetCode);
 
         sendResetCodeByEmail(email, resetCode);
+    }
+
+    @Override
+    @Transactional("transactionManager")
+    public void updateCategoryUser(UserRequestDto requestDto) {
+        Users userById = getUserById(requestDto.getId());
+        userById.setCategories(requestDto.getCategoryList());
+        log.info("Установка мастеру категории {}", LocalDateTime.now());
     }
 
     private void validateUserForPasswordReset(Users user) {
@@ -211,12 +231,30 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private UserRequestDto getFromUser(Users user) {
+        List<String> reasonBlock = user.getBlackListEntries().stream()
+                .map(blackList -> blackList.getReason())
+                .collect(Collectors.toList());
         return UserRequestDto.builder()
+                .id(user.getId())
                 .fullName(user.getFullName())
                 .appointmentsUser(user.getClientAppointments())
                 .appointmentsMaster(user.getMasterAppointments())
                 .role(user.getRole())
                 .email(user.getEmail())
+                .blocked(user.getLocked())
+                .reasonsBlock(reasonBlock)
+                .emailVerified(user.getEmailVerified())
+                .build();
+    }
+
+    private UserRequestDto getMasterFromUser(Users user) {
+        return UserRequestDto.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .appointmentsMaster(user.getMasterAppointments())
+                .role(user.getRole())
+                .email(user.getEmail())
+                .categoryList(user.getCategories())
                 .build();
     }
 
