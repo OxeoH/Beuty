@@ -105,45 +105,57 @@ class AppointmentRepositoryTest extends BaseRepositoryTest {
 
     @Test
     void hasUserAppointmentByIdTest() {
+        // GIVEN | WHEN
         boolean hasUserAppointmentById = appointmentRepository.hasClientAppointmentById(777L, 2L);
 
+        // THEN
         assertTrue(hasUserAppointmentById);
     }
 
     @Test
     void hasMasterAppointmentByIdTest() {
+        // GIVEN | WHEN
         boolean hasMasterAppointmentById = appointmentRepository.hasMasterAppointmentById(777L, 3L);
 
+        // THEN
         assertTrue(hasMasterAppointmentById);
     }
 
     @Test
     void getTotalEarningsForTodayTest() {
+        // GIVEN | WHEN
         Double totalEarningsForToday = appointmentRepository.getTotalEarningsForToday();
 
+        // THEN
         assertEquals(0.0, totalEarningsForToday);
     }
 
     @Test
     void getTotalEarningsForLastMonthTest() {
+        // GIVEN | WHEN
         Long totalEarningsForLastMonth = appointmentRepository.getTotalEarningsForLastMonth(LocalDate.now());
 
+        // THEN
         assertEquals(0, totalEarningsForLastMonth);
     }
 
     @Test
     void countClientsForTodayTest() {
+        // GIVEN | WHEN
         Long countClientsForToday = appointmentRepository.countClientsForToday();
 
+        // THEN
         assertEquals(0, countClientsForToday);
     }
 
     @Test
     void getLast10AppointmentInCurrentMonthTest() {
+        // GIVEN | WHEN
         List<Appointment> last10AppointmentInCurrentMonth = appointmentRepository.getLast10AppointmentInCurrentMonth(
                 LocalDate.now(),
                 LocalDate.now().plusMonths(1), Pageable.ofSize(1));
 
+        // THEN
         assertEquals(0, last10AppointmentInCurrentMonth.size());
     }
 
