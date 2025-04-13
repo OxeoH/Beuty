@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import by.beaty.place.model.BlackList;
+import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.common.Role;
 import by.beaty.place.repository.BlackListRepository;
@@ -521,6 +522,62 @@ class UserServiceImplTest {
 
         // WHEN | THEN
         assertThrows(LockedException.class, () -> userService.sendResetCode("test"));
+    }
+
+    @Test
+    void getAllMasters_shouldReturnListOfMasters() {
+        // GIVEN
+        Users user1 = Users.builder().build();
+        Users user2 = Users.builder().build();
+        List<Users> users = List.of(user1, user2);
+
+        when(userRepository.getAllByRole(Role.MASTER)).thenReturn(users);
+
+        // WHEN
+        List<UserRequestDto> result = userService.getAllMasters();
+
+        // THEN
+        assertEquals(2, result.size());
+        verify(userRepository).getAllByRole(Role.MASTER);
+    }
+
+    @Test
+    void getAllMasters_shouldReturnEmptyList_whenNoMastersFound() {
+        // GIVEN
+        when(userRepository.getAllByRole(Role.MASTER)).thenReturn(Collections.emptyList());
+
+        // WHEN
+        List<UserRequestDto> result = userService.getAllMasters();
+
+        // THEN
+        assertTrue(result.isEmpty());
+        verify(userRepository).getAllByRole(Role.MASTER);
+    }
+
+    @Test
+    void updateCategoryUser_shouldUpdateCategories() {
+        // GIVEN
+        Long userId = 1L;
+        Category category = Category.builder()
+                .name("CATEGORY")
+                .build();
+        List<Category> newCategories = List.of(category);
+
+        Users user = Users.builder().build();
+        user.setId(userId);
+
+        UserRequestDto dto = UserRequestDto.builder().build();
+        dto.setId(userId);
+        dto.setCategoryList(newCategories);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // WHEN
+        userService.updateCategoryUser(dto);
+
+        // THEN
+        assertEquals(newCategories, user.getCategories());
+        verify(userRepository, times(1)).findById(userId);
     }
 
     private UserRequestDto createUserRequestDto(String username, String email, String fullName, String password) {
