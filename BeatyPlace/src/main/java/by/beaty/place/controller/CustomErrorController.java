@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-//TODO Тесты
 @Controller
 public class CustomErrorController implements ErrorController {
 
@@ -40,7 +39,6 @@ public class CustomErrorController implements ErrorController {
                         "У вас нет прав к этому ресурсу. Попробуйте еще раз или обратитесь в поддержку.");
                 return "error/errorPage";
             }
-
         }
 
         model.addAttribute("statusCode", 500);
