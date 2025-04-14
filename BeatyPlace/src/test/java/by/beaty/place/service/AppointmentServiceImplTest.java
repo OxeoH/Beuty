@@ -1,6 +1,7 @@
 package by.beaty.place.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -340,5 +341,57 @@ class AppointmentServiceImplTest {
 
         // THEN
         verify(appointmentRepository, times(1)).updateStatus(appointmentId, newStatus);
+    }
+
+    @Test
+    void hasMasterAppointmentById_shouldReturnTrue_whenAppointmentExists() {
+        // GIVEN
+        Long appointmentId = 1L;
+        Long masterId = 2L;
+
+        when(appointmentRepository.hasMasterAppointmentById(appointmentId, masterId)).thenReturn(true);
+
+        // WHEN
+        boolean result = appointmentService.hasMasterAppointmentById(appointmentId, masterId);
+
+        // THEN
+        assertTrue(result);
+        verify(appointmentRepository, times(1)).hasMasterAppointmentById(appointmentId, masterId);
+    }
+
+    @Test
+    void hasMasterAppointmentById_shouldReturnFalse_whenAppointmentDoesNotExist() {
+        // GIVEN
+        Long appointmentId = 1L;
+        Long masterId = 2L;
+
+        when(appointmentRepository.hasMasterAppointmentById(appointmentId, masterId)).thenReturn(false);
+
+        // WHEN
+        boolean result = appointmentService.hasMasterAppointmentById(appointmentId, masterId);
+
+        // THEN
+        assertFalse(result);
+        verify(appointmentRepository, times(1)).hasMasterAppointmentById(appointmentId, masterId);
+    }
+
+    @Test
+    void hasMasterAppointmentById_shouldThrowException_whenIdIsNull() {
+        // GIVEN
+        Long masterId = 2L;
+
+        // WHEN | THEN
+        assertThrows(IllegalArgumentException.class, () ->
+                appointmentService.hasMasterAppointmentById(null, masterId));
+    }
+
+    @Test
+    void hasMasterAppointmentById_shouldThrowException_whenMasterIdIsNull() {
+        // GIVEN
+        Long appointmentId = 1L;
+
+        // WHEN | THEN
+        assertThrows(IllegalArgumentException.class, () ->
+                appointmentService.hasMasterAppointmentById(appointmentId, null));
     }
 }
