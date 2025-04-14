@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WorkScheduleRepository extends JpaRepository<WorkSchedule, Long> {
 
-    //TODO Тест
     @Query("SELECT ws FROM WorkSchedule ws " +
             "WHERE ws.master = :master " +
             "AND ws.date BETWEEN :startDate AND :endDate " +

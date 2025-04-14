@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -157,5 +158,31 @@ class WorkScheduleServiceImplTest {
         // WHEN | THEN
         assertThrows(SlotNotFoundException.class, () -> workScheduleService.updateStatusWorkSchedule(SLOT_ID, SlotStatus.BOOKED));
         verify(workScheduleRepository, times(1)).findById(SLOT_ID);
+    }
+
+    @Test
+    void createWorkSchedule_shouldSaveWorkScheduleCorrectly() {
+        // GIVEN
+        Long masterId = 1L;
+
+        WorkScheduleDto workScheduleDto = new WorkScheduleDto();
+        workScheduleDto.setDate(LocalDate.of(2025, 4, 14));
+        workScheduleDto.setStartTime(LocalTime.of(9, 0));
+        workScheduleDto.setEndTime(LocalTime.of(18, 0));
+
+        ArgumentCaptor<WorkSchedule> captor = ArgumentCaptor.forClass(WorkSchedule.class);
+
+        // WHEN
+        workScheduleService.createWorkSchedule(masterId, workScheduleDto);
+
+        // THEN
+        verify(workScheduleRepository, times(1)).save(captor.capture());
+
+        WorkSchedule savedSchedule = captor.getValue();
+        assertEquals(masterId, savedSchedule.getMaster().getId());
+        assertEquals(workScheduleDto.getDate(), savedSchedule.getDate());
+        assertEquals(workScheduleDto.getStartTime(), savedSchedule.getStartTime());
+        assertEquals(workScheduleDto.getEndTime(), savedSchedule.getEndTime());
+        assertEquals(SlotStatus.FREE, savedSchedule.getStatus());
     }
 }
