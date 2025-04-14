@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface AppointmentServiceApi {
 
-    //TODO Переделать на ДТО возвращение
     List<Appointment> getAppointmentByMaster(UserRequestDto master);
 
     List<Appointment> getAppointmentByClient(UserRequestDto client);
@@ -30,12 +29,9 @@ public interface AppointmentServiceApi {
 
     List<Appointment> getLast10AppointmentInCurrentMonth();
 
-    //TODO Тест
     List<Appointment> getAll();
 
-    //TODO Тест
     List<Appointment> getAllByUserId(Long userId);
 
-    //TODO Тест
     void updateStatus(Long id, AppointmentStatus status);
 }

@@ -16,6 +16,7 @@ import by.beaty.place.model.Appointment;
 import by.beaty.place.model.Category;
 import by.beaty.place.model.Users;
 import by.beaty.place.model.WorkSchedule;
+import by.beaty.place.model.common.AppointmentStatus;
 import by.beaty.place.model.common.SlotStatus;
 import by.beaty.place.repository.AppointmentRepository;
 import by.beaty.place.service.api.CategoryServiceApi;
@@ -25,6 +26,7 @@ import by.beaty.place.service.dto.UserRequestDto;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -286,5 +288,57 @@ class AppointmentServiceImplTest {
 
         // WHEN | THEN
         assertThrows(IllegalArgumentException.class, () -> appointmentService.createAppointment(appointmentRequestDto));
+    }
+
+    @Test
+    void getAll_shouldReturnAllAppointments() {
+        // GIVEN
+        Appointment appointment1 = Appointment.builder().build();
+        Appointment appointment2 = Appointment.builder().build();
+        List<Appointment> mockAppointments = List.of(appointment1, appointment2);
+
+        when(appointmentRepository.findAll()).thenReturn(mockAppointments);
+
+        // WHEN
+        List<Appointment> result = appointmentService.getAll();
+
+        // THEN
+        assertEquals(2, result.size());
+        Assertions.assertSame(appointment1, result.get(0));
+        Assertions.assertSame(appointment2, result.get(1));
+        verify(appointmentRepository, times(1)).findAll();
+    }
+
+    @Test
+    void getAllByUserId_shouldReturnAppointmentsForGivenUser() {
+        // GIVEN
+        Long userId = 1L;
+        Appointment appointment1 = Appointment.builder().build();
+        Appointment appointment2 = Appointment.builder().build();
+        List<Appointment> mockAppointments = List.of(appointment1, appointment2);
+
+        when(appointmentRepository.findAllByUserId(userId)).thenReturn(mockAppointments);
+
+        // WHEN
+        List<Appointment> result = appointmentService.getAllByUserId(userId);
+
+        // THEN
+        assertEquals(2, result.size());
+        Assertions.assertSame(appointment1, result.get(0));
+        Assertions.assertSame(appointment2, result.get(1));
+        verify(appointmentRepository, times(1)).findAllByUserId(userId);
+    }
+
+    @Test
+    void updateStatus_shouldUpdateAppointmentStatus() {
+        // GIVEN
+        Long appointmentId = 1L;
+        AppointmentStatus newStatus = AppointmentStatus.CANCELED;
+
+        // WHEN
+        appointmentService.updateStatus(appointmentId, newStatus);
+
+        // THEN
+        verify(appointmentRepository, times(1)).updateStatus(appointmentId, newStatus);
     }
 }
