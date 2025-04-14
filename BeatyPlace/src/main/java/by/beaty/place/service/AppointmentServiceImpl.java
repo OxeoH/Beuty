@@ -138,7 +138,6 @@ public class AppointmentServiceImpl implements AppointmentServiceApi {
         return hasUserAppointmentById;
     }
 
-    //TODO Тест
     @Override
     public boolean hasMasterAppointmentById(Long id, Long idMaster) {
         if (id == null || idMaster == null) {
