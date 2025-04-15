@@ -15,6 +15,5 @@ public interface WorkScheduleServiceApi {
 
     List<WorkScheduleDto> findByMasterAndDateBetween(Long idMaster);
 
-    //TODO Test
     void createWorkSchedule(Long idMaster, WorkScheduleDto workScheduleDto);
 }

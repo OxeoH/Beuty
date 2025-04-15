@@ -24,13 +24,11 @@ public interface UserServiceApi {
 
     List<UserRequestDto> getAllUsers();
 
-    //TODO Тест
     List<UserRequestDto> getAllMasters();
 
     List<UserRequestDto> getUsersByRole(Role role);
 
     void sendResetCode(String email);
 
-    //TODO Тест
     void updateCategoryUser(UserRequestDto requestDto);
 }

@@ -32,8 +32,6 @@ public class AppointmentController {
     private final CategoryServiceApi categoryService;
     private final SalonReviewsServiceApi salonReviewsService;
 
-
-    //TODO Перейти на использование DTO
     @GetMapping("/")
     public String calendarAppointmentPage(@RequestParam(required = false, name = "not_found") String notFound, Model model) {
         String username = getCurrentUsername();
@@ -53,8 +51,6 @@ public class AppointmentController {
 
         return "user/calendarPage";
     }
-
-    //TODO Перейти на использование DTO
     @GetMapping("/category/{idCategory}")
     public String calendarAppointmentUserByCategory(@PathVariable("idCategory") Long idCategory, Model model) {
         String username = getCurrentUsername();

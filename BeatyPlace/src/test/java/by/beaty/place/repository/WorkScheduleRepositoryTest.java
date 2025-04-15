@@ -75,6 +75,19 @@ class WorkScheduleRepositoryTest extends BaseRepositoryTest {
         assertEquals(0, masterWorkSchedule.size());
     }
 
+    @Test
+    void findByMasterAndDateBetween() {
+        // GIVEN
+        Users master = getMaster();
+
+        // GIVEN
+        List<WorkSchedule> workSchedules = workScheduleRepository.findByMasterAndDateBetween(master, LocalDate.now(),
+                LocalDate.now().plusDays(1));
+
+        // THEN
+        assertEquals(0, workSchedules.size());
+    }
+
     private static Users getMaster() {
         return Users.builder()
                 .id(MASTER_ID)
