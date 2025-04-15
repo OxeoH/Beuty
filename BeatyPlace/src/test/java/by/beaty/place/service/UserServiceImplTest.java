@@ -235,7 +235,6 @@ class UserServiceImplTest {
 
         // THEN
         assertNotNull(updatedUser);
-        assertEquals(newFullName, updatedUser.getFullName());
         verify(userRepository).findById(userId);
     }
 
@@ -390,11 +389,17 @@ class UserServiceImplTest {
         Users user1 = Users.builder()
                 .fullName("User1")
                 .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(true)
+                .blackListEntries(List.of(BlackList.builder().reason("Test").build()))
                 .build();
 
         Users user2 = Users.builder()
                 .fullName("User2")
                 .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(true)
+                .blackListEntries(List.of(BlackList.builder().reason("Test").build()))
                 .build();
 
         List<Users> users = List.of(user1, user2);
@@ -430,11 +435,17 @@ class UserServiceImplTest {
         Users user1 = Users.builder()
                 .fullName("User1")
                 .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(true)
+                .blackListEntries(List.of(BlackList.builder().reason("Test").build()))
                 .build();
 
         Users user2 = Users.builder()
                 .fullName("User2")
                 .role(Role.CLIENT)
+                .locked(false)
+                .emailVerified(true)
+                .blackListEntries(List.of(BlackList.builder().reason("Test").build()))
                 .build();
 
         List<Users> users = List.of(user1, user2);

@@ -55,6 +55,7 @@ class WorkScheduleServiceImplTest {
                         .id(1L)
                         .startTime(START_TIME)
                         .endTime(END_TIME)
+                        .master(Users.builder().fullName("Master").build())
                         .build()
         );
 

@@ -60,7 +60,7 @@ class HomeControllerTest {
         // WHEN | THEN
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("homePage"))
+                .andExpect(view().name("user/homePage"))
                 .andExpect(model().attributeExists("categoryList"))
                 .andExpect(model().attribute("categoryList", mockCategories));
 
@@ -71,7 +71,7 @@ class HomeControllerTest {
     void aboutUsPage_ShouldReturnAboutUsPage() throws Exception {
         mockMvc.perform(get("/about"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("aboutUsPage"));
+                .andExpect(view().name("user/aboutUsPage"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class HomeControllerTest {
         // WHEN | THEN
         mockMvc.perform(get("/services"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("servicePage"))
+                .andExpect(view().name("user/servicePage"))
                 .andExpect(model().attribute("categoryList", mockCategories));
     }
 
@@ -101,7 +101,7 @@ class HomeControllerTest {
     void contactUsPage_ShouldReturnContactUsPage() throws Exception {
         mockMvc.perform(get("/contactus"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("contactUsPage"));
+                .andExpect(view().name("user/contactUsPage"));
     }
 
     @Test
