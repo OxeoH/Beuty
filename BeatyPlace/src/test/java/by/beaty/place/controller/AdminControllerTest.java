@@ -45,6 +45,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -62,7 +63,7 @@ class AdminControllerTest {
     private CategoryServiceApi categoryService;
     @Mock
     private AppointmentServiceApi appointmentService;
-    @Mock
+    @MockBean
     private UserServiceApi userService;
     @Mock
     private WorkScheduleServiceApi workScheduleService;
