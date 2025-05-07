@@ -24,7 +24,7 @@ public class MailSenderImpl implements MailSenderApi {
         MimeMessage messageMail = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(messageMail, true);
 
-        helper.setFrom("MS_mSlinK@trial-pxkjn419nq9gz781.mlsender.net");
+        helper.setFrom("OxeoHH@yandex.by");
         helper.setTo(emailTo);
         helper.setSubject(subject);
         helper.setText(message, true);

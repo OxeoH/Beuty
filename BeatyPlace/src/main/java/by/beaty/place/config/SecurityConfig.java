@@ -2,6 +2,8 @@ package by.beaty.place.config;
 
 import by.beaty.place.service.CustomUserDetailsService;
 import by.beaty.place.service.exception.handler.CustomAuthenticationFailureHandler;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +43,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/user/**", "/auth/**").permitAll()
+                        .requestMatchers(
+                                "/", "/politics", "/about", "/services", "/login",
+                                "/user/**", "/auth/**", "/static/**", "/contactus",
+                                "/notifications/**", "/error", "/error/**"
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/master/**").hasAnyRole("ADMIN", "MASTER")
                         .requestMatchers("/client/**").hasAnyRole("ADMIN", "MASTER", "CLIENT")
@@ -55,8 +61,18 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/")
                         .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_UNAUTHORIZED);
+                            request.getRequestDispatcher("/error").forward(request, response);
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
+                            request.getRequestDispatcher("/error").forward(request, response);
+                        })
                 )
                 .userDetailsService(customUserDetailsService);
 

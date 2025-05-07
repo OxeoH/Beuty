@@ -1,6 +1,7 @@
 package by.beaty.place.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import by.beaty.place.config.BaseRepositoryTest;
 import by.beaty.place.model.Appointment;
@@ -9,17 +10,19 @@ import by.beaty.place.model.Users;
 import by.beaty.place.model.common.AppointmentStatus;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 
-class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
+class AppointmentRepositoryTest extends BaseRepositoryTest {
 
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15")
@@ -58,7 +61,6 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
                 .price(BigDecimal.ZERO)
                 .status(AppointmentStatus.PENDING)
                 .category(category)
-                .appointmentDate(LocalDateTime.now())
                 .build();
         // WHEN
         appointmentRepository.save(appointment);
@@ -69,7 +71,7 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void getAppointmentByMaster() {
+    void getAppointmentByMasterTest() {
         // GIVEN
         Users master = getUsers(3L);
 
@@ -81,7 +83,7 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void getAppointmentByClient() {
+    void getAppointmentByClientTest() {
         // GIVEN
         Users client = getUsers(2L);
 
@@ -93,12 +95,68 @@ class AppointmentRepositoryRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void getCountAppointmentsByMaster() {
+    void getCountAppointmentsByMasterTest() {
         // GIVEN | WHEN
         Long countAppointmentsByMasterId = appointmentRepository.countAppointmentsByMasterId(3L);
 
         // THEN
         assertEquals(1, countAppointmentsByMasterId);
+    }
+
+    @Test
+    void hasUserAppointmentByIdTest() {
+        // GIVEN | WHEN
+        boolean hasUserAppointmentById = appointmentRepository.hasClientAppointmentById(777L, 2L);
+
+        // THEN
+        assertTrue(hasUserAppointmentById);
+    }
+
+    @Test
+    void hasMasterAppointmentByIdTest() {
+        // GIVEN | WHEN
+        boolean hasMasterAppointmentById = appointmentRepository.hasMasterAppointmentById(777L, 3L);
+
+        // THEN
+        assertTrue(hasMasterAppointmentById);
+    }
+
+    @Test
+    void getTotalEarningsForTodayTest() {
+        // GIVEN | WHEN
+        Double totalEarningsForToday = appointmentRepository.getTotalEarningsForToday();
+
+        // THEN
+        assertEquals(0.0, totalEarningsForToday);
+    }
+
+    @Test
+    void getTotalEarningsForLastMonthTest() {
+        // GIVEN | WHEN
+        Long totalEarningsForLastMonth = appointmentRepository.getTotalEarningsForLastMonth(LocalDate.now());
+
+        // THEN
+        assertEquals(0, totalEarningsForLastMonth);
+    }
+
+    @Test
+    void countClientsForTodayTest() {
+        // GIVEN | WHEN
+        Long countClientsForToday = appointmentRepository.countClientsForToday();
+
+        // THEN
+        assertEquals(0, countClientsForToday);
+    }
+
+    @Test
+    void getLast10AppointmentInCurrentMonthTest() {
+        // GIVEN | WHEN
+        List<Appointment> last10AppointmentInCurrentMonth = appointmentRepository.getLast10AppointmentInCurrentMonth(
+                LocalDate.now(),
+                LocalDate.now().plusMonths(1), Pageable.ofSize(1));
+
+        // THEN
+        assertEquals(0, last10AppointmentInCurrentMonth.size());
     }
 
     private static Users getUsers(long id) {

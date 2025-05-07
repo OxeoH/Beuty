@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
@@ -57,6 +58,8 @@ public class UserServiceImpl implements UserServiceApi {
 
         String verificationCode = generateVerificationCode(requestDto.getEmail());
         fillVerificationCode(user, verificationCode);
+        user.setEmailVerified(false);
+        user.setLocked(false);
         userRepository.save(user);
 
         try {
@@ -72,15 +75,13 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private Users getUserFromDto(UserRequestDto requestDto) {
-        Users user = new Users();
-        user.setUsername(requestDto.getUsername());
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.setFullName(requestDto.getFullName());
-        user.setRole(Role.CLIENT);
-        user.setEmailVerified(false);
-        user.setLocked(false);
-        return user;
+        return Users.builder()
+                .username(requestDto.getUsername())
+                .email(requestDto.getEmail())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
+                .fullName(requestDto.getFullName())
+                .role(Role.CLIENT)
+                .build();
     }
 
     private void fillVerificationCode(Users user, String code) {
@@ -107,10 +108,10 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    @Transactional("transactionManager")
     public Users updateUser(Long id, UserRequestDto userRequestDto) {
         Users userById = getUserById(id);
-        userById.setFullName(userRequestDto.getFullName());
-
+        userById.setRole(userRequestDto.getRole());
         log.info("Обновление пользователя с идентификаторов {} {}", id, LocalDateTime.now());
         return userById;
     }
@@ -120,6 +121,7 @@ public class UserServiceImpl implements UserServiceApi {
         Users userByResetCode = userRepository.findByResetCode(resetCode)
                 .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь с кодом %s не найден", resetCode)));
         userByResetCode.setPassword(passwordEncoder.encode(newPassword));
+        userByResetCode.setResetCode(null);
         log.info("Смена пароля для пользователя {}", LocalDateTime.now());
         userRepository.save(userByResetCode);
     }
@@ -129,6 +131,7 @@ public class UserServiceImpl implements UserServiceApi {
     public void blockUser(Long userId, Long blockedById, LocalDateTime blockedUntil, String reason) {
         Users userById = getUserById(userId);
         BlackList blackList = BlackList.builder()
+                .blockedAt(LocalDateTime.now())
                 .blockedUntil(blockedUntil)
                 .reason(reason)
                 .user(userById)
@@ -163,6 +166,16 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     @Override
+    public List<UserRequestDto> getAllMasters() {
+        List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(Role.MASTER)
+                .stream()
+                .map(this::getMasterFromUser)
+                .toList();
+        log.info("Получение всех мастеров по роли {}", LocalDateTime.now());
+        return userRequestDtoList;
+    }
+
+    @Override
     public List<UserRequestDto> getUsersByRole(Role role) {
         List<UserRequestDto> userRequestDtoList = userRepository.getAllByRole(role)
                 .stream()
@@ -185,11 +198,19 @@ public class UserServiceImpl implements UserServiceApi {
         sendResetCodeByEmail(email, resetCode);
     }
 
+    @Override
+    @Transactional("transactionManager")
+    public void updateCategoryUser(UserRequestDto requestDto) {
+        Users userById = getUserById(requestDto.getId());
+        userById.setCategories(requestDto.getCategoryList());
+        log.info("Установка мастеру категории {}", LocalDateTime.now());
+    }
+
     private void validateUserForPasswordReset(Users user) {
-        if (!user.isEmailVerified()) {
+        if (Boolean.FALSE.equals(user.getEmailVerified())) {
             throw new DisabledException("Почта не верифицирована!");
         }
-        if (user.isLocked()) {
+        if (Boolean.TRUE.equals(user.getLocked())) {
             throw new LockedException("Ваш аккаунт заблокирован, обратитесь в поддержку!");
         }
     }
@@ -210,12 +231,30 @@ public class UserServiceImpl implements UserServiceApi {
     }
 
     private UserRequestDto getFromUser(Users user) {
+        List<String> reasonBlock = user.getBlackListEntries().stream()
+                .map(blackList -> blackList.getReason())
+                .collect(Collectors.toList());
         return UserRequestDto.builder()
+                .id(user.getId())
                 .fullName(user.getFullName())
                 .appointmentsUser(user.getClientAppointments())
                 .appointmentsMaster(user.getMasterAppointments())
                 .role(user.getRole())
                 .email(user.getEmail())
+                .blocked(user.getLocked())
+                .reasonsBlock(reasonBlock)
+                .emailVerified(user.getEmailVerified())
+                .build();
+    }
+
+    private UserRequestDto getMasterFromUser(Users user) {
+        return UserRequestDto.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .appointmentsMaster(user.getMasterAppointments())
+                .role(user.getRole())
+                .email(user.getEmail())
+                .categoryList(user.getCategories())
                 .build();
     }
 

@@ -104,7 +104,7 @@ class VerificationServiceImplTest {
         // WHEN | THEN
         boolean result = verificationService.verifyEmail("validCode");
         assertTrue(result);
-        assertTrue(testUser.isEmailVerified());
+        assertTrue(testUser.getEmailVerified());
         assertNull(testUser.getVerificationCode());
         assertNull(testUser.getVerificationCodeExpiresAt());
         verify(userRepository, times(1)).save(testUser);
@@ -124,6 +124,7 @@ class VerificationServiceImplTest {
     void testVerifyEmail_CodeExpired() {
         // GIVEN
         testUser.setVerificationCodeExpiresAt(LocalDateTime.now().minusHours(1));
+        testUser.setEmailVerified(false);
 
         when(userRepository.findByVerificationCode("validCode"))
                 .thenReturn(Optional.of(testUser));
@@ -133,7 +134,7 @@ class VerificationServiceImplTest {
 
         // THEN
         assertFalse(result);
-        assertFalse(testUser.isEmailVerified());
+        assertFalse(testUser.getEmailVerified());
         assertNotNull(testUser.getVerificationCode());
         assertNotNull(testUser.getVerificationCodeExpiresAt());
     }
@@ -141,6 +142,7 @@ class VerificationServiceImplTest {
     @Test
     void testVerifyEmail_CodeMismatch() {
         // GIVEN
+        testUser.setEmailVerified(false);
         when(userRepository.findByVerificationCode("wrongCode"))
                 .thenReturn(Optional.of(testUser));
 
@@ -149,7 +151,7 @@ class VerificationServiceImplTest {
 
         // THEN
         assertFalse(result);
-        assertFalse(testUser.isEmailVerified());
+        assertFalse(testUser.getEmailVerified());
         assertNotNull(testUser.getVerificationCode());
         assertNotNull(testUser.getVerificationCodeExpiresAt());
     }

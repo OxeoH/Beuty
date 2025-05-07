@@ -39,7 +39,7 @@ class ReviewRepositoryTest extends BaseRepositoryTest {
     }
 
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewMasterRepository reviewRepository;
 
     @Test
     void saveReviewTest() {

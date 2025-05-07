@@ -1,50 +1,75 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Смена пароля</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script>
-    function validatePasswords() {
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const errorMessage = document.getElementById("error-message");
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/user/fonts/icomoon/style.css">
+  <link rel="stylesheet" href="/static/user/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/user/css/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/user/css/loginStyle.css">
+  <link rel="icon" href="/static/user/images/logo.png">
 
-      if (password !== confirmPassword) {
-        errorMessage.textContent = "Пароли не совпадают!";
-        return false;
-      }
-
-      if (password.length < 8) {
-        errorMessage.textContent = "Пароль должен содержать минимум 8 символов!";
-        return false;
-      }
-
-      return true;
-    }
-  </script>
+  <title>Авторизация</title>
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-<div class="card p-4 shadow-lg" style="max-width: 400px; width: 100%;">
-  <h3 class="text-center mb-3">Смена пароля</h3>
-  <form action="/user/change-password/${resetCode}" method="POST" onsubmit="return validatePasswords()">
-    <input type="hidden" name="token" value="{token}">
+<body>
+<script>
+  function validatePasswords() {
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const errorMessage = document.getElementById("error-message");
 
-    <div class="mb-3">
-      <label for="password" class="form-label">Новый пароль</label>
-      <input type="password" class="form-control" id="password" name="password" required>
+    if (password !== confirmPassword) {
+      errorMessage.textContent = "Пароли не совпадают!";
+      return false;
+    }
+
+    if (password.length < 8) {
+      errorMessage.textContent = "Пароль должен содержать минимум 8 символов!";
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+<div class="d-lg-flex half">
+  <div class="bg order-1 order-md-2" style="background-image: url('/static/user/images/bg_reset_password_form.jpg');"></div>
+  <div class="contents order-2 order-md-1">
+
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-7">
+          <h3>Смена пароля в <strong>BeatuPlace</strong></h3>
+          <form action="/user/change-password/${resetCode}" method="POST" onsubmit="return validatePasswords()">
+
+            <div class="form-group first">
+              <label for="newPass">Новый пароль</label>
+              <input required type="password" class="form-control" placeholder="Новый пароль" id="newPass" name="password"
+                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                     title="Пароль должен содержать минимум 8 символов, включая хотя бы одну цифру, одну заглавную и одну строчную букву.">
+              <small class="form-text text-muted">Минимум 8 символов, одна цифра, одна заглавная и одна строчная буква.</small>
+            </div>
+
+            <div class="form-group last mb-3">
+              <label for="confirmPassword">Подтвердите пароль</label>
+              <input required type="password" class="form-control" placeholder="Подтвердите пароль" id="confirmPassword">
+              <small class="form-text text-muted" id="passwordError" style="color: red; display: none;">Пароли не совпадают.</small>
+            </div>
+
+
+            <input type="submit" value="Сменить пароль" class="btn btn-block btn-dark">
+
+          </form>
+        </div>
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label for="confirmPassword" class="form-label">Подтвердите пароль</label>
-      <input type="password" class="form-control" id="confirmPassword" required>
-    </div>
-
-    <div id="error-message" class="text-danger mb-3"></div>
-
-    <button type="submit" class="btn btn-primary w-100">Сменить пароль</button>
-  </form>
+  </div>
 </div>
+
+<script src="/static/user/js/jquery-3.3.1.min.js"></script>
+<script src="/static/user/js/popper.min.js"></script>
+<script src="/static/user/js/bootstrap.min.js"></script>
+<script src="/static/user/js/main.js"></script>
 </body>
 </html>

@@ -24,7 +24,11 @@ public interface UserServiceApi {
 
     List<UserRequestDto> getAllUsers();
 
+    List<UserRequestDto> getAllMasters();
+
     List<UserRequestDto> getUsersByRole(Role role);
 
     void sendResetCode(String email);
+
+    void updateCategoryUser(UserRequestDto requestDto);
 }
