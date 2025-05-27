@@ -89,7 +89,7 @@
               <div class="h-100 p-4 p-lg-5 bg-light site-block-feature-7">
                 <span style="color: black!important;" class="icon-info-circle display-3 text-primary mb-4 d-block"></span>
                 <h3 class="text-black h4">${category.getName()}</h3>
-                <p>Придумать описание</p>
+                <p>${category.describe}</p>
                 <p><strong class="font-weight-bold text-primary">BYN ${category.price}</strong></p>
               </div>
             </div>

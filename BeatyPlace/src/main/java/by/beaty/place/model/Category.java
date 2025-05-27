@@ -37,6 +37,8 @@ public class Category {
 
     private BigDecimal price;
 
+    private String describe;
+
     @ManyToMany
     @JoinTable(
             name = "category_master",

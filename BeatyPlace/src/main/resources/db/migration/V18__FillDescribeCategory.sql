@@ -1,0 +1,10 @@
+UPDATE categories SET describe = 'Женская стрижка с учетом формы лица и структуры волос' WHERE id = 1;
+UPDATE categories SET describe = 'Мужская стрижка с элементами ухода и укладки' WHERE id = 2;
+UPDATE categories SET describe = 'Окрашивание в один или несколько тонов, обновление цвета' WHERE id = 3;
+UPDATE categories SET describe = 'Гигиеническая обработка ногтей, кутикулы, покрытие лаком' WHERE id = 4;
+UPDATE categories SET describe = 'Комплексный уход за ногами и ногтями стоп' WHERE id = 5;
+UPDATE categories SET describe = 'Создание повседневных и вечерних причесок' WHERE id = 6;
+UPDATE categories SET describe = 'Расслабляющий или тонизирующий массаж области лица' WHERE id = 7;
+UPDATE categories SET describe = 'Процедура глубокого очищения кожи лица' WHERE id = 8;
+UPDATE categories SET describe = 'Окрашивание, ламинирование, коррекция формы бровей и ресниц' WHERE id = 9;
+UPDATE categories SET describe = 'Удаление волос сахарной пастой, деликатная депиляция' WHERE id = 10;

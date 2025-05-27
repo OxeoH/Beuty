@@ -32,7 +32,7 @@ public class CustomErrorController implements ErrorController {
             } else if (statusCode == 401) {
                 model.addAttribute("statusCode", statusCode);
                 model.addAttribute("errorMessage", "Вы не авторизованы. Попробуйте еще раз или обратитесь в поддержку.");
-                return "error/errorPage";
+                return "user/loginPage";
             } else if (statusCode == 403) {
                 model.addAttribute("statusCode", statusCode);
                 model.addAttribute("errorMessage",
