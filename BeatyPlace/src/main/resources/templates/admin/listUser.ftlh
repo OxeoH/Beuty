@@ -68,19 +68,19 @@
                           <a href="#" class="btn btn-sm btn-outline-secondary"
                              data-bs-toggle="modal"
                              data-bs-target="#roleModal"
-                             data-user-id="${user.id}"
+                             data-user-id="${user.id?c}"
                              data-current-role="${user.role.name()}">
                             Изменить роль
                           </a>
                         </td>
                         <td class="align-middle">
-                          <a href="/admin/users/appointments/${user.id}" class="btn btn-sm btn-outline-secondary">
+                          <a href="/admin/users/appointments/${user.id?c}" class="btn btn-sm btn-outline-secondary">
                             Записи
                           </a>
                         </td>
                         <td class="align-middle">
                             <#if user.blocked>
-                              <form action="/admin/users/unblock/${user.id}" method="post" class="d-inline">
+                              <form action="/admin/users/unblock/${user.id?c}" method="post" class="d-inline">
                                 <button type="submit" class="btn btn-sm btn-outline-secondary">
                                   Разблокировать
                                 </button>
@@ -89,7 +89,7 @@
                               <a href="#" class="btn btn-sm btn-outline-secondary"
                                  data-bs-toggle="modal"
                                  data-bs-target="#blockUserModal"
-                                 data-user-id="${user.id}">
+                                 data-user-id="${user.id?c}">
                                 Заблокировать
                               </a>
                             </#if>
