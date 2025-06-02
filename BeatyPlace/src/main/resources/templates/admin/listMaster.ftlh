@@ -43,12 +43,12 @@
                           <span class="text-secondary text-xs font-weight-bold">${master.email}</span>
                         </td>
                         <td class="align-middle">
-                          <a href="/admin/workschedule/master/${master.id}" class="btn btn-sm btn-outline-secondary">
+                          <a href="/admin/workschedule/master/${master.id?c}" class="btn btn-sm btn-outline-secondary">
                             График мастера
                           </a>
                         </td>
                         <td class="align-middle">
-                          <a href="/admin/master/feedback/${master.id}" class="btn btn-sm btn-outline-secondary">
+                          <a href="/admin/master/feedback/${master.id?c}" class="btn btn-sm btn-outline-secondary">
                            Отзывы
                           </a>
                         </td>
@@ -57,7 +57,7 @@
                               <a class="btn btn-sm btn-outline-secondary"
                                  data-bs-toggle="modal"
                                  data-bs-target="#categoryModal"
-                                 data-master-id="${master.id}"
+                                 data-master-id="${master.id?c}"
                               >
                                 Установить категорию
                               </a>
